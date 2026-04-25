@@ -13,7 +13,7 @@ os.environ["TF_USE_LEGACY_KERAS"] = "1"
 # CONFIG — must match train_breed_classifier.py
 # =========================
 BACKBONE       = "efficientnet_b0"          # or "mobilenet_v2"
-MODEL_PATH     = "models/breed_model.keras"
+MODEL_PATH     = "models/best_finetuned.keras"
 CLASS_MAP_PATH = "models/class_indices.json"
 IMAGE_SIZE     = (224, 224)
 UPLOAD_FOLDER  = "static/uploads"
