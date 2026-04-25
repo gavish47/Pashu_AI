@@ -35,8 +35,7 @@ app = Flask(__name__)
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 print(f"Loading model: {MODEL_PATH}")
-model = load_model(MODEL_PATH, compile=False)
-
+model = load_model(MODEL_PATH, compile=False, safe_mode=False)
 with open(CLASS_MAP_PATH, "r") as f:
     class_indices = json.load(f)
 # JSON keys come back as strings; values are ints. Reverse-map for lookups.
