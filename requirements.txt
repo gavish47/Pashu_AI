@@ -5,4 +5,4 @@ opencv-python-headless
 pillow
 scikit-learn
 matplotlib
-gunicorn
+gradio
