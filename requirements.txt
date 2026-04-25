@@ -1,10 +1,8 @@
-tensorflow==2.15
-numpy>=1.23
-pandas>=1.5
-matplotlib>=3.6
-seaborn>=0.12
-scikit-learn>=1.2
-opencv-python>=4.7
-Pillow>=9.4
 flask
+tensorflow==2.15.0
+numpy
+opencv-python-headless
+pillow
+scikit-learn
+matplotlib
 gunicorn
