@@ -1,0 +1,2528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PashuAI — Cattle Intelligence for India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  /* === SURFACES (light mode SaaS — cool neutral) === */
+  --ink:#fafaf8;            /* page bg — barely off-white, neutral cool */
+  --ink-2:#ffffff;          /* card surface — pure white */
+  --ink-3:#f5f5f3;          /* elevated subtle */
+  --ink-4:#ededea;          /* recessed/hover */
+
+  /* === DARK PANELS (for 3D viewports, image frames — keeps techy contrast) === */
+  --dark:#0e1110;           /* deep cool ink */
+  --dark-2:#181c1a;         /* card on dark */
+  --dark-3:#252a26;         /* elevated on dark */
+  --on-dark:#e7e8e3;        /* primary text on dark */
+  --on-dark-dim:#8a8e85;    /* secondary text on dark */
+
+  /* (kept for legacy refs) */
+  --paper:#0e1110;
+  --paper-soft:#181c1a;
+
+  /* === TEXT (on light bg) === */
+  --cream:#0f1115;          /* primary text — near black, slight cool */
+  --cream-dim:#5b6471;      /* secondary text — slate */
+
+  /* === PRIMARY — SAGE (natural, modern) === */
+  --saffron:#5b7a2f;        /* deep sage — primary brand color */
+  --saffron-soft:#7a9d3c;   /* mid sage — hover */
+  --saffron-deep:#3d5420;   /* deepest sage — borders, shadows */
+  --saffron-tint:rgba(91,122,47,.08);
+  --saffron-glow:rgba(91,122,47,.18);
+
+  /* === SECONDARY — TERRACOTTA (cattle/India warmth) === */
+  --terra:#c2502a;
+  --terra-soft:#d97757;
+  --terra-tint:rgba(194,80,42,.08);
+
+  /* === TERTIARY — SLATE (techy neutral) === */
+  --teal:#475569;
+  --teal-soft:#64748b;
+
+  /* === NEURAL — CYAN/INDIGO (AI accents) === */
+  --neural:#0891b2;          /* cyan — used for AI/network elements */
+  --neural-soft:#22d3ee;
+  --neural-deep:#0e7490;
+  --neural-dim:rgba(8,145,178,.1);
+  --neural-glow:rgba(34,211,238,.25);
+  --indigo:#4338ca;
+  --indigo-soft:#6366f1;
+
+  --forest:#5e7d3e;
+
+  /* === STATUS === */
+  --ok:#15803d;
+  --ok-soft:#86efac;
+  --warn:#b45309;
+  --warn-soft:#fcd34d;
+  --bad:#b91c1c;
+  --bad-soft:#fca5a5;
+
+  /* === STROKES === */
+  --rule:#e4e4e0;
+  --rule-soft:#eeeeea;
+  --hairline:rgba(15,17,21,.05);
+
+  /* === SIZES === */
+  --t-mini:11px; --t-cap:12px;
+
+  /* === RADII (modern SaaS uses softer) === */
+  --r-xs:4px;--r-sm:8px;--r-md:12px;--r-lg:18px;
+
+  /* === SHADOWS (soft, layered, modern) === */
+  --sh-1:0 1px 2px rgba(13,16,11,.04),0 1px 1px rgba(13,16,11,.03);
+  --sh-2:0 6px 16px rgba(13,16,11,.05),0 2px 4px rgba(13,16,11,.04);
+  --sh-3:0 24px 48px rgba(13,16,11,.08),0 8px 16px rgba(13,16,11,.05);
+  --sh-glow:0 0 0 4px var(--saffron-tint);
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:'Geist','Inter',sans-serif;
+  background:var(--ink);
+  color:var(--cream);
+  font-size:15px;
+  line-height:1.55;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  cursor:none;
+  letter-spacing:-.005em;
+}
+
+/* === Modern thin scrollbar === */
+*::-webkit-scrollbar{width:10px;height:10px}
+*::-webkit-scrollbar-track{background:transparent}
+*::-webkit-scrollbar-thumb{background:rgba(13,16,11,.15);border-radius:99px;border:2px solid transparent;background-clip:padding-box}
+*::-webkit-scrollbar-thumb:hover{background:rgba(13,16,11,.28);background-clip:padding-box;border:2px solid transparent}
+
+/* === Focus-visible for keyboard accessibility === */
+button:focus-visible,a:focus-visible,[tabindex]:focus-visible,input:focus-visible,.dz:focus-visible{
+  outline:none;
+  box-shadow:0 0 0 3px var(--saffron-tint),0 0 0 4px var(--saffron);
+  border-radius:var(--r-sm);
+}
+
+/* === Selection === */
+::selection{background:var(--saffron-tint);color:var(--saffron-deep)}
+
+/* Subtle cool gradient ambient — modern SaaS feel */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 1100px 700px at 80% -10%,rgba(91,122,47,.04),transparent 60%),
+    radial-gradient(ellipse 800px 600px at 5% 110%,rgba(8,145,178,.035),transparent 60%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.018;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .15 0 0 0 0 .18 0 0 0 0 .2 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+}
+
+/* Custom cursor — refined for light mode */
+#cur{position:fixed;width:6px;height:6px;background:var(--saffron);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .18s,height .18s,background .18s}
+#cur-r{position:fixed;width:34px;height:34px;border:1.2px solid rgba(91,122,47,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s,border-color .2s}
+
+/* === Page management === */
+.page{display:none;position:relative;z-index:2}
+.page.active{display:block;animation:pin .55s cubic-bezier(.22,1,.36,1) both}
+@keyframes pin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* === Reveal-on-scroll — modern SaaS micro-interaction === */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal.delay-1{transition-delay:.08s}
+.reveal.delay-2{transition-delay:.16s}
+.reveal.delay-3{transition-delay:.24s}
+.reveal.delay-4{transition-delay:.32s}
+
+/* === Counter animation — number tabular feel === */
+.counter{font-variant-numeric:tabular-nums;display:inline-block}
+
+/* === Navbar — modern SaaS sticky === */
+.nav-strip{
+  position:sticky;top:0;z-index:500;
+  background:rgba(247,245,239,.85);
+  backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);
+  border-bottom:1px solid var(--rule);
+}
+.nav-mini{
+  border-bottom:1px solid var(--rule);
+  background:var(--ink-3);
+  height:32px;display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.18em;
+  color:var(--cream-dim);text-transform:uppercase;
+}
+.nav-mini .pulse{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ok);margin-right:8px;box-shadow:0 0 0 0 var(--ok);animation:pulse 2.4s ease infinite}
+.nav-mini .sep{margin:0 14px;color:var(--rule);font-size:8px}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(21,128,61,.45)}50%{box-shadow:0 0 0 5px rgba(21,128,61,0)}}
+
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 36px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:14px;cursor:none;text-decoration:none;flex-shrink:0}
+.brand-mark{
+  width:38px;height:38px;border-radius:10px;
+  background:linear-gradient(155deg,#2a2e35,#0f1115);
+  position:relative;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 1px rgba(15,17,21,.08),0 1px 2px rgba(15,17,21,.08),inset 0 1px 0 rgba(255,255,255,.08);
+  flex-shrink:0;
+}
+.brand-mark svg{width:22px;height:22px;color:#ffffff;position:relative;z-index:1;stroke-width:1.6}
+.brand-mark::after{
+  content:'';position:absolute;bottom:-2px;right:-2px;width:8px;height:8px;border-radius:50%;
+  background:var(--saffron);box-shadow:0 0 0 2px var(--ink);
+}
+.brand-text{display:flex;flex-direction:column;line-height:1;justify-content:center}
+.brand-name{font-family:'Geist',sans-serif;font-weight:700;font-size:19px;letter-spacing:-.025em;color:var(--cream)}
+.brand-tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;color:var(--cream-dim);text-transform:uppercase;margin-top:3px}
+
+.nav-links{display:flex;align-items:center;gap:2px}
+.nlink{font-family:'Geist',sans-serif;font-size:13.5px;font-weight:500;color:var(--cream-dim);padding:8px 14px;border-radius:var(--r-sm);border:none;background:none;cursor:none;transition:color .18s,background .18s;white-space:nowrap;letter-spacing:-.01em}
+.nlink:hover{color:var(--cream);background:rgba(247,240,225,.04)}
+.nlink.active{color:var(--cream);font-weight:600}
+.nlink.active::after{content:'';display:block;height:2px;background:var(--cream);margin-top:5px;border-radius:2px}
+
+.dropdown{position:relative}
+.dropdown:hover .dpanel,.dropdown:focus-within .dpanel{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0)}
+.dpanel{
+  position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%) translateY(-6px);
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:var(--r-md);
+  padding:18px 18px 14px;width:560px;opacity:0;pointer-events:none;
+  transition:opacity .25s,transform .25s;box-shadow:var(--sh-3);
+  display:grid;grid-template-columns:repeat(2,1fr);gap:2px;
+}
+.dpanel-head{
+  grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline;
+  padding:0 8px 12px;border-bottom:1px solid var(--rule-soft);margin-bottom:6px;
+}
+.dpanel-head .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--cream-dim);text-transform:uppercase}
+.dpanel-head .ct{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.16em;color:var(--cream-dim);text-transform:uppercase}
+.drop-btn{font-family:'Geist',sans-serif;font-size:13px;font-weight:500;color:var(--cream-dim);padding:9px 12px;border-radius:var(--r-xs);border:none;background:none;cursor:none;transition:color .15s,background .15s;text-align:left;display:flex;align-items:center;gap:10px}
+.drop-btn:hover{color:var(--cream);background:rgba(232,152,41,.06)}
+.drop-btn .num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cream-dim);width:22px;letter-spacing:0}
+.drop-btn:hover .num{color:var(--saffron)}
+
+.cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--saffron);color:#ffffff;
+  font-family:'Geist',sans-serif;font-weight:600;font-size:13px;
+  padding:9px 18px;border-radius:var(--r-sm);border:1px solid var(--saffron-deep);
+  cursor:none;transition:transform .15s,background .15s,box-shadow .2s;
+  box-shadow:0 1px 2px rgba(0,0,0,.05),inset 0 1px 0 rgba(255,255,255,.15);
+  letter-spacing:-.01em;margin-left:6px;
+}
+.cta:hover{background:var(--saffron-deep);transform:translateY(-1px);box-shadow:0 4px 12px rgba(91,122,47,.25),inset 0 1px 0 rgba(255,255,255,.15)}
+.cta:active{transform:translateY(0);box-shadow:0 1px 2px rgba(0,0,0,.05)}
+
+/* === HERO === */
+.hero{max-width:1280px;margin:0 auto;padding:80px 36px 60px;position:relative;z-index:2}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative}
+
+.hero-stamp{
+  position:absolute;bottom:-18px;right:-14px;z-index:4;
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:12px;
+  padding:14px 18px;
+  box-shadow:var(--sh-2);
+  display:flex;align-items:center;gap:14px;
+  animation:stampFloat 6s ease-in-out infinite;
+}
+.hero-stamp .stamp-num{
+  font-family:'Geist',sans-serif;
+  font-weight:600;font-size:30px;letter-spacing:-.04em;line-height:1;
+  color:var(--cream);
+}
+.hero-stamp .stamp-meta{display:flex;flex-direction:column;gap:2px}
+.hero-stamp .stamp-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--cream-dim);text-transform:uppercase}
+.hero-stamp .stamp-sub{font-family:'Geist',sans-serif;font-size:12px;color:var(--cream);font-weight:500}
+@keyframes stampFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;
+  color:var(--cream-dim);text-transform:uppercase;margin-bottom:32px;
+  padding-left:0;
+}
+.hero-eyebrow::before{
+  content:'';width:6px;height:6px;border-radius:50%;background:var(--saffron);display:inline-block;
+}
+.hero-eyebrow .num{color:var(--cream);font-weight:600}
+
+.hero-title{
+  font-family:'Geist',sans-serif;
+  font-size:clamp(36px,4.5vw,58px);
+  font-weight:700;
+  line-height:1.05;
+  letter-spacing:-.035em;
+  color:var(--cream);
+  margin-bottom:24px;
+  max-width:540px;
+}
+.hero-title .em{
+  font-style:italic;font-weight:600;
+  color:var(--cream);
+  display:inline-block;padding-right:.05em;
+}
+.hero-title .underline{
+  position:relative;display:inline-block;
+}
+.hero-title .underline::after{
+  content:'';position:absolute;left:-2%;right:-2%;bottom:.04em;height:.1em;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' fill='none' stroke='%235b7a2f' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M2 5 Q 50 1, 100 4 T 198 4'/%3E%3C/svg%3E") no-repeat center;
+  background-size:100% 100%;
+  opacity:.85;
+}
+
+.hero-sub{
+  font-size:16px;color:var(--cream-dim);line-height:1.6;font-weight:400;
+  max-width:500px;margin-bottom:32px;
+}
+.hero-sub strong{color:var(--cream);font-weight:600}
+
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:38px}
+
+.btn-primary{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--saffron);color:#ffffff;
+  font-family:'Geist',sans-serif;font-weight:600;font-size:14.5px;
+  padding:13px 26px;border-radius:var(--r-sm);border:1px solid var(--saffron-deep);
+  cursor:none;letter-spacing:-.01em;
+  box-shadow:0 1px 2px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.18);
+  transition:all .18s cubic-bezier(.4,0,.2,1);
+}
+.btn-primary:hover{background:var(--saffron-deep);transform:translateY(-1px);box-shadow:0 6px 18px rgba(91,122,47,.28),inset 0 1px 0 rgba(255,255,255,.18)}
+.btn-primary:active{transform:translateY(0);box-shadow:0 1px 2px rgba(0,0,0,.05)}
+
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--ink-2);color:var(--cream);
+  font-family:'Geist',sans-serif;font-weight:500;font-size:14.5px;
+  padding:13px 24px;border-radius:var(--r-sm);
+  border:1px solid var(--rule);
+  cursor:none;letter-spacing:-.01em;
+  box-shadow:var(--sh-1);
+  transition:all .18s cubic-bezier(.4,0,.2,1);
+}
+.btn-secondary:hover{border-color:var(--cream-dim);background:var(--ink-3);transform:translateY(-1px);box-shadow:var(--sh-2)}
+
+.btn-link{
+  display:inline-flex;align-items:center;gap:6px;
+  background:none;color:var(--cream);
+  font-family:'Geist',sans-serif;font-size:14px;font-weight:500;
+  padding:13px 8px;border:none;cursor:none;
+  transition:color .18s,opacity .18s;
+  letter-spacing:-.005em;opacity:.75;
+}
+.btn-link:hover{color:var(--cream);opacity:1}
+.btn-link::after{content:'→';display:inline-block;transition:transform .2s}
+.btn-link:hover::after{transform:translateX(3px)}
+
+.hero-meta{display:flex;flex-wrap:wrap;gap:24px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cream-dim);letter-spacing:.05em}
+.hero-meta span{display:inline-flex;align-items:center;gap:7px}
+.hero-meta .dot{width:5px;height:5px;border-radius:50%;background:var(--saffron)}
+.hero-meta .dot.green{background:var(--ok)}
+.hero-meta .dot.teal{background:#60a5fa}
+
+/* === HERO 3D PANEL — flex column layout, hosts AI detection mockup === */
+.hero-3d{
+  height:480px;position:relative;
+  display:flex;flex-direction:column;
+  border:1px solid var(--rule);border-radius:var(--r-lg);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 35%,rgba(96,165,250,.06),transparent 70%),
+    linear-gradient(155deg,#161a1c 0%,#0e1213 100%);
+  overflow:hidden;
+  box-shadow:var(--sh-3),inset 0 0 0 1px rgba(255,255,255,.04);
+}
+.hero-3d::before{
+  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(96,165,250,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,165,250,.05) 1px,transparent 1px);
+  background-size:32px 32px;
+  mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 30%,transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 30%,transparent 80%);
+}
+
+/* Corner brackets on the panel itself */
+.hero-3d-tl,.hero-3d-tr,.hero-3d-bl,.hero-3d-br{position:absolute;width:14px;height:14px;border:1.5px solid #93c5fd;z-index:5;pointer-events:none}
+.hero-3d-tl{top:14px;left:14px;border-right:none;border-bottom:none}
+.hero-3d-tr{top:14px;right:14px;border-left:none;border-bottom:none}
+.hero-3d-bl{bottom:14px;left:14px;border-right:none;border-top:none}
+.hero-3d-br{bottom:14px;right:14px;border-left:none;border-top:none}
+
+/* Top status pill */
+.hero-3d-label{
+  position:absolute;top:18px;left:50%;transform:translateX(-50%);z-index:6;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;
+  color:var(--on-dark);text-transform:uppercase;font-weight:600;
+  padding:6px 14px;background:rgba(14,17,16,.85);border:1px solid var(--dark-3);border-radius:99px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:inline-flex;align-items:center;gap:7px;
+  white-space:nowrap;
+}
+.hero-3d-label .blink{animation:blink 1.4s ease infinite;color:#fbbf24;font-size:8px;line-height:1}
+#mockup-status{transition:color .4s ease}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* === IMAGE AREA (flex:1) === */
+.mockup-area{
+  flex:1;
+  position:relative;
+  margin:60px 18px 0;
+  border-radius:8px;
+  overflow:hidden;
+  z-index:2;
+}
+.mockup-image-wrap{
+  position:absolute;inset:0;
+  background:#0a0c0e;
+  border-radius:8px;
+  overflow:hidden;
+}
+.mockup-img{
+  width:100%;height:100%;display:block;
+  animation:imgFadeIn 1.4s cubic-bezier(.4,0,.2,1) both;
+  transition:transform .6s cubic-bezier(.4,0,.2,1);
+  transform-origin:center;
+}
+img.mockup-img{object-fit:cover;filter:brightness(.88) contrast(1.08) saturate(.92)}
+canvas.mockup-img{background:transparent}
+@keyframes imgFadeIn{
+  0%{opacity:0;transform:scale(1.08)}
+  100%{opacity:1;transform:scale(1)}
+}
+.mockup-image-wrap:hover .mockup-img{transform:scale(1.03)}
+
+/* SVG fallback (revealed when img errors) */
+.mockup-img-fallback{
+  position:absolute;inset:0;display:none;
+  align-items:center;justify-content:center;color:#cbd5e1;
+}
+.mockup-image-wrap.img-failed .mockup-img{display:none}
+.mockup-image-wrap.img-failed .mockup-img-fallback{display:flex}
+.mockup-img-fallback svg{width:80%;height:auto;max-width:300px}
+
+/* Detection overlay sits on top of image */
+.mockup-overlay{
+  position:absolute;inset:0;pointer-events:none;z-index:3;
+  transition:transform .25s ease;
+}
+
+/* Bounding box — draws in via clip-path */
+.mockup-bbox{
+  position:absolute;
+  top:18%;left:25%;right:18%;bottom:18%;
+  border:1.5px solid rgba(96,165,250,.7);
+  border-radius:4px;
+  opacity:0;
+  animation:bboxDraw 1s cubic-bezier(.4,0,.2,1) .8s forwards,
+            bboxPulse 2.5s ease-in-out 1.8s infinite;
+}
+@keyframes bboxDraw{
+  0%{opacity:0;clip-path:inset(50% 50% 50% 50%)}
+  100%{opacity:1;clip-path:inset(0 0 0 0)}
+}
+@keyframes bboxPulse{
+  0%,100%{border-color:rgba(96,165,250,.6);box-shadow:0 0 0 0 rgba(96,165,250,0)}
+  50%{border-color:rgba(96,165,250,1);box-shadow:0 0 0 4px rgba(96,165,250,.1)}
+}
+
+/* Bbox corner reticles — small targeting brackets at each corner */
+.bbox-corner{
+  position:absolute;width:10px;height:10px;
+  border:2px solid #60a5fa;
+  opacity:0;
+  animation:cornerFadeIn .35s ease 1.4s forwards;
+}
+.bbox-corner.tl{top:-2px;left:-2px;border-right:none;border-bottom:none}
+.bbox-corner.tr{top:-2px;right:-2px;border-left:none;border-bottom:none}
+.bbox-corner.bl{bottom:-2px;left:-2px;border-right:none;border-top:none}
+.bbox-corner.br{bottom:-2px;right:-2px;border-left:none;border-top:none}
+@keyframes cornerFadeIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+
+/* Bbox labels — slide in from top/bottom */
+.mockup-bbox-label{
+  position:absolute;top:0;left:-1px;
+  background:#60a5fa;color:#0a0c0e;
+  font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;
+  padding:3px 7px;letter-spacing:.12em;
+  border-radius:3px 3px 0 0;
+  transform:translateY(-100%);opacity:0;
+  animation:labelSlideDown .5s cubic-bezier(.4,0,.2,1) 1.6s forwards;
+}
+@keyframes labelSlideDown{
+  from{opacity:0;transform:translateY(-150%)}
+  to{opacity:1;transform:translateY(-100%)}
+}
+.mockup-bbox-conf{
+  position:absolute;bottom:-1px;right:-1px;
+  background:#60a5fa;color:#0a0c0e;
+  font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;
+  padding:3px 7px;letter-spacing:.05em;
+  border-radius:0 0 3px 3px;
+  transform:translateY(100%);opacity:0;
+  animation:labelSlideUp .5s cubic-bezier(.4,0,.2,1) 1.7s forwards;
+}
+@keyframes labelSlideUp{
+  from{opacity:0;transform:translateY(150%)}
+  to{opacity:1;transform:translateY(100%)}
+}
+
+/* Feature group — dot + label as one unit, staggered pop-in */
+.mockup-feat-group{
+  position:absolute;
+  display:flex;align-items:center;gap:8px;
+  opacity:0;
+  animation:featPop .6s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+.mockup-feat-group:nth-of-type(1){animation-delay:2.0s}
+.mockup-feat-group:nth-of-type(2){animation-delay:2.2s}
+.mockup-feat-group:nth-of-type(3){animation-delay:2.4s}
+@keyframes featPop{
+  0%{opacity:0;transform:scale(0)}
+  60%{opacity:1;transform:scale(1.2)}
+  100%{opacity:1;transform:scale(1)}
+}
+.mockup-feat{
+  width:9px;height:9px;border-radius:50%;
+  background:#fbbf24;
+  box-shadow:0 0 0 2px rgba(14,17,16,.85),0 0 12px rgba(251,191,36,.55);
+  flex-shrink:0;
+  animation:featPulse 2.2s ease-in-out infinite;
+}
+@keyframes featPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.5)}
+}
+.mockup-feat-label{
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#fbbf24;
+  letter-spacing:.14em;font-weight:700;
+  white-space:nowrap;padding:2px 7px;
+  background:rgba(14,17,16,.92);border-radius:3px;
+  border:1px solid rgba(251,191,36,.3);
+}
+
+/* Scan line — sweeps top to bottom continuously */
+.mockup-scanline{
+  position:absolute;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,#60a5fa 30%,#60a5fa 70%,transparent);
+  opacity:0;
+  box-shadow:0 0 14px rgba(96,165,250,.7);
+  animation:scan 3.4s ease-in-out 1s infinite;
+  z-index:4;
+}
+@keyframes scan{
+  0%{top:0;opacity:0}
+  10%{opacity:.85}
+  90%{opacity:.85}
+  100%{top:100%;opacity:0}
+}
+
+/* === DATA CARD — sits below image, separated by border === */
+.mockup-data{
+  flex-shrink:0;
+  border-top:1px solid var(--dark-3);
+  margin:14px 0 0;padding:14px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  background:rgba(14,17,16,.5);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  opacity:0;
+  animation:dataSlideUp .6s cubic-bezier(.4,0,.2,1) .4s forwards;
+}
+@keyframes dataSlideUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.mockup-breed-info{display:flex;flex-direction:column;gap:3px}
+.mockup-breed-name{
+  font-family:'Geist',sans-serif;font-weight:700;font-size:18px;color:var(--on-dark);letter-spacing:-.02em;
+}
+.mockup-breed-meta{
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--on-dark-dim);
+  letter-spacing:.14em;text-transform:uppercase;
+}
+.mockup-conf-block{display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-width:100px}
+.mockup-conf-num{
+  font-family:'Geist',sans-serif;font-weight:700;font-size:18px;color:#60a5fa;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+}
+.mockup-conf-bar{
+  width:100px;height:3px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;
+}
+.mockup-conf-fill{
+  height:100%;background:linear-gradient(90deg,#3b82f6,#60a5fa);border-radius:99px;
+  width:0;
+  animation:confFill 1.4s cubic-bezier(.4,0,.2,1) .8s forwards;
+}
+@keyframes confFill{from{width:0}to{width:94%}}
+
+/* === Marquee — all-caps sans-serif ticker === */
+.marquee{
+  background:var(--dark);color:var(--on-dark);
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  position:relative;z-index:2;overflow:hidden;
+}
+.marquee-track{
+  display:flex;align-items:center;
+  font-family:'Geist',sans-serif;font-size:14px;font-weight:500;
+  text-transform:uppercase;letter-spacing:.18em;
+  white-space:nowrap;
+  animation:scroll 50s linear infinite;
+  padding:18px 0;
+}
+.marquee-track span{padding:0 24px;display:inline-flex;align-items:center;gap:24px}
+.marquee-track .star{color:#60a5fa;font-size:10px;font-weight:600}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* === Editorial stat block — like a research footnote === */
+.figures{
+  max-width:1280px;margin:0 auto;padding:60px 36px;
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  display:grid;grid-template-columns:240px 1fr;gap:60px;align-items:start;
+  position:relative;z-index:2;
+}
+.figures-head{position:sticky;top:120px}
+.figures-head .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:var(--cream-dim);text-transform:uppercase;margin-bottom:14px;display:inline-flex;align-items:center;gap:8px}
+.figures-head .lbl::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--saffron);display:inline-block}
+.figures-head h3{font-family:'Geist',sans-serif;font-weight:700;font-size:28px;line-height:1.05;letter-spacing:-.03em;margin-bottom:12px;color:var(--cream)}
+.figures-head h3 em{font-style:italic;font-weight:600;color:var(--cream)}
+.figures-head p{font-size:13.5px;color:var(--cream-dim);line-height:1.6}
+
+.figures-table{display:flex;flex-direction:column}
+.fig-row{
+  display:grid;grid-template-columns:60px 1fr 200px 100px;gap:24px;align-items:baseline;
+  padding:20px 0;border-bottom:1px solid var(--rule-soft);
+  transition:padding-left .25s;
+}
+.fig-row:last-child{border-bottom:none}
+.fig-row:hover{padding-left:8px}
+.fig-row .num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cream-dim);letter-spacing:.1em}
+.fig-row .label{font-family:'Geist',sans-serif;font-size:15px;font-weight:600;color:var(--cream);letter-spacing:-.01em}
+.fig-row .desc{font-size:12.5px;color:var(--cream-dim);line-height:1.5}
+.fig-row .value{font-family:'Geist',sans-serif;font-weight:700;font-size:30px;text-align:right;letter-spacing:-.03em;color:var(--cream);line-height:1;font-variant-numeric:tabular-nums}
+
+/* === Cards section: how it works === */
+.section{max-width:1280px;margin:0 auto;padding:80px 36px;position:relative;z-index:2}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;gap:40px;flex-wrap:wrap}
+.sec-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:var(--cream-dim);text-transform:uppercase;margin-bottom:10px;display:inline-flex;align-items:center;gap:8px}
+.sec-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--saffron);display:inline-block}
+.sec-title{font-family:'Geist',sans-serif;font-weight:700;font-size:38px;line-height:1.05;letter-spacing:-.03em;max-width:600px;color:var(--cream)}
+.sec-title em{font-style:italic;font-weight:600;color:var(--cream)}
+.sec-aside{font-size:13.5px;color:var(--cream-dim);max-width:340px;line-height:1.6}
+
+/* === PROBLEM PAGE === */
+.problem-page-wrap{
+  max-width:1100px;margin:60px auto 0;padding:0 var(--side) 80px;
+}
+.problem-page-head{
+  display:grid;grid-template-columns:80px 1fr;gap:18px;margin-bottom:60px;align-items:flex-start;
+}
+.problem-page-head .step-num{font-family:'Geist',sans-serif;font-style:italic;font-weight:500;font-size:64px;color:var(--ink-soft);line-height:.9;letter-spacing:-.04em;opacity:.7}
+.problem-eyebrow{
+  display:inline-block;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;
+  color:var(--ink-soft);text-transform:uppercase;font-weight:600;
+  padding:6px 12px;border:1px solid var(--rule);border-radius:99px;
+  margin-bottom:20px;
+}
+.problem-title{
+  font-family:'Geist',sans-serif;font-weight:700;font-size:clamp(32px,4.5vw,52px);
+  line-height:1.04;letter-spacing:-.035em;color:var(--ink-1);margin-bottom:18px;
+}
+.problem-title em{font-style:italic;font-weight:600}
+.problem-lead{
+  font-size:17px;color:var(--ink-2);line-height:1.65;max-width:640px;
+}
+.problem-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+  margin-bottom:60px;
+}
+.problem-card{
+  background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);
+  padding:28px 24px;
+  transition:border-color .25s,transform .25s cubic-bezier(.4,0,.2,1),box-shadow .25s;
+}
+.problem-card:hover{transform:translateY(-3px);border-color:var(--ink-3);box-shadow:var(--sh-2)}
+.problem-num{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;
+  color:var(--ink-soft);font-weight:600;margin-bottom:14px;
+}
+.problem-card-title{
+  font-family:'Geist',sans-serif;font-weight:700;font-size:21px;letter-spacing:-.025em;
+  color:var(--ink-1);margin-bottom:12px;line-height:1.15;
+}
+.problem-card p{
+  font-size:14.5px;color:var(--ink-2);line-height:1.65;
+}
+.problem-solution{
+  background:var(--ink-1);color:var(--cream);
+  border-radius:var(--r-lg);padding:48px 44px;
+  position:relative;overflow:hidden;
+}
+.problem-solution::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 80% 20%,rgba(96,165,250,.08),transparent 60%),
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:auto,40px 40px,40px 40px;
+  mask-image:linear-gradient(180deg,black,transparent);
+  -webkit-mask-image:linear-gradient(180deg,black,transparent);
+}
+.problem-solution > *{position:relative;z-index:1}
+.problem-solution-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;
+  color:#60a5fa;text-transform:uppercase;font-weight:600;
+  margin-bottom:16px;
+}
+.problem-solution-title{
+  font-family:'Geist',sans-serif;font-weight:700;font-size:clamp(28px,3.6vw,42px);
+  line-height:1.05;letter-spacing:-.035em;color:var(--cream);margin-bottom:20px;
+}
+.problem-solution p{
+  font-size:16px;color:var(--cream-dim);line-height:1.7;max-width:680px;margin-bottom:14px;
+}
+.problem-solution strong{color:var(--cream);font-weight:700}
+.problem-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  margin-top:32px;padding-top:32px;border-top:1px solid rgba(255,255,255,.1);
+}
+.problem-stat{display:flex;flex-direction:column;gap:6px}
+.problem-stat-num{
+  font-family:'Geist',sans-serif;font-weight:700;font-size:30px;letter-spacing:-.03em;
+  color:var(--cream);line-height:1;font-variant-numeric:tabular-nums;
+}
+.problem-stat-lbl{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;
+  color:var(--cream-dim);text-transform:uppercase;font-weight:500;
+}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.step{
+  padding:34px 32px;border-right:1px solid var(--rule);
+  position:relative;transition:background .3s;
+  display:flex;flex-direction:column;gap:18px;min-height:280px;
+}
+.step:last-child{border-right:none}
+.step:hover{background:var(--ink-2)}
+.step-num{
+  font-family:'Geist',sans-serif;font-style:italic;
+  font-weight:500;font-size:54px;line-height:1;color:var(--cream-dim);
+  letter-spacing:-.04em;opacity:.7;
+}
+.step-title{font-family:'Geist',sans-serif;font-weight:600;font-size:20px;letter-spacing:-.02em;line-height:1.2;color:var(--cream)}
+.step-desc{font-size:13.5px;color:var(--cream-dim);line-height:1.65;margin-top:auto}
+.step-icon{position:absolute;top:30px;right:30px;width:48px;height:48px;color:var(--cream-dim);opacity:.55}
+
+/* === Use cases — irregular grid === */
+.uc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}
+.uc-card{
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:var(--r-md);
+  padding:26px 24px;
+  transition:transform .3s cubic-bezier(.4,0,.2,1),border-color .25s,box-shadow .3s;
+  display:flex;flex-direction:column;gap:14px;min-height:240px;
+  box-shadow:var(--sh-1);
+}
+.uc-card:hover{transform:translateY(-4px);border-color:var(--cream-dim);box-shadow:var(--sh-2)}
+.uc-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--cream-dim)}
+.uc-illus{
+  width:42px;height:42px;border-radius:10px;
+  background:var(--ink-3);border:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:center;color:var(--saffron);
+}
+.uc-illus svg{width:22px;height:22px}
+.uc-t{font-family:'Geist',sans-serif;font-weight:600;font-size:17px;letter-spacing:-.02em;line-height:1.2;color:var(--cream)}
+.uc-d{font-size:12.5px;color:var(--cream-dim);line-height:1.6;margin-top:auto}
+
+/* === DETECT page === */
+.det-wrap{max-width:920px;margin:0 auto;padding:60px 36px 80px;position:relative;z-index:2}
+.det-head{display:grid;grid-template-columns:80px 1fr;gap:30px;align-items:start;margin-bottom:48px}
+.det-head .step-num{font-size:64px;color:var(--cream-dim);line-height:.9;font-weight:500;opacity:.6}
+.det-head h1{font-family:'Geist',sans-serif;font-weight:700;font-size:44px;letter-spacing:-.03em;line-height:1.02;margin-bottom:12px;color:var(--cream)}
+.det-head h1 em{font-style:italic;font-weight:600;color:var(--cream)}
+.det-head p{font-size:14.5px;color:var(--cream-dim);max-width:540px;line-height:1.6}
+
+.tip-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.tip{
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:var(--r-sm);
+  padding:14px 18px;display:flex;gap:12px;
+}
+.tip-svg{flex-shrink:0;color:var(--cream-dim);width:22px;height:22px}
+.tip-t{font-family:'Geist',sans-serif;font-size:13px;color:var(--cream);font-weight:600;line-height:1.2;letter-spacing:-.01em}
+.tip-d{font-size:11.5px;color:var(--cream-dim);line-height:1.5;margin-top:3px}
+
+.dz{
+  display:block;cursor:none;
+  border:2px dashed var(--rule);border-radius:var(--r-md);
+  background:var(--ink-2);
+  transition:border-color .3s,background .3s,box-shadow .3s;
+  margin-bottom:18px;overflow:hidden;position:relative;
+}
+.dz::before{
+  content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,var(--saffron-tint),transparent 70%);
+  opacity:0;transition:opacity .3s;
+}
+.dz:hover::before,.dz.dragging::before{opacity:1}
+.dz:hover,.dz.dragging{border-color:var(--saffron);background:var(--ink-3)}
+.dz input[type="file"]{display:none}
+.dz-idle{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 24px;gap:14px;position:relative;z-index:1}
+.dz-icon{
+  width:60px;height:60px;border-radius:14px;
+  background:linear-gradient(155deg,#2a2e35,#0f1115);
+  display:flex;align-items:center;justify-content:center;
+  color:#ffffff;
+  box-shadow:0 0 0 1px rgba(15,17,21,.08),0 6px 16px rgba(15,17,21,.1),inset 0 1px 0 rgba(255,255,255,.08);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.dz:hover .dz-icon{transform:scale(1.08) translateY(-4px)}
+.dz-main{font-family:'Geist',sans-serif;font-size:18px;font-weight:600;color:var(--cream);letter-spacing:-.01em}
+.dz-hint{font-size:13px;color:var(--cream-dim)}
+.dz-hint span{color:var(--cream);font-weight:600;border-bottom:1px solid var(--rule);padding-bottom:1px}
+.dz-ready{display:flex;align-items:center;gap:20px;padding:22px 26px;position:relative;z-index:1}
+.preview-thumb{width:84px;height:84px;object-fit:cover;border-radius:var(--r-xs);border:1px solid var(--rule);flex-shrink:0;box-shadow:var(--sh-1)}
+.preview-name{font-family:'Geist',sans-serif;font-size:14.5px;color:var(--cream);max-width:420px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;letter-spacing:-.01em}
+.preview-change{font-size:12px;color:var(--cream-dim);margin-top:4px;font-family:'Geist',sans-serif}
+
+.detect-go{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:12px;
+  background:var(--saffron);color:#ffffff;
+  border:1px solid var(--saffron-deep);border-radius:var(--r-sm);padding:18px;
+  font-family:'Geist',sans-serif;font-size:15.5px;font-weight:600;
+  cursor:none;letter-spacing:-.01em;
+  transition:all .18s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 1px 2px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.18);
+}
+.detect-go:hover:not(:disabled){background:var(--saffron-deep);transform:translateY(-2px);box-shadow:0 8px 20px rgba(91,122,47,.28),inset 0 1px 0 rgba(255,255,255,.18)}
+.detect-go:disabled{background:var(--ink-3);color:var(--cream-dim);box-shadow:none;cursor:not-allowed;border-color:var(--rule)}
+
+.loading-wrap{flex-direction:column;align-items:center;justify-content:center;padding:60px 32px;display:none}
+.spinner{width:48px;height:48px;border:2px solid var(--rule);border-top-color:var(--saffron);border-right-color:rgba(232,152,41,.3);border-radius:50%;animation:spin .65s linear infinite;margin:0 auto 20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-msg{font-family:'Geist',sans-serif;font-size:14px;color:var(--cream-dim);margin-bottom:18px;text-align:center;font-weight:500}
+.loading-bar-wrap{height:2px;background:var(--ink-3);width:280px;overflow:hidden}
+.loading-bar-fill{height:100%;background:var(--saffron);animation:loadBar 2.2s ease-in-out infinite}
+@keyframes loadBar{0%{width:0%;opacity:1}75%{width:90%;opacity:1}100%{width:100%;opacity:0}}
+
+.result-wrap{display:none;animation:fadeUp .55s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.result-card{
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:var(--r-md);
+  overflow:hidden;display:flex;margin-bottom:18px;box-shadow:var(--sh-2);
+}
+.result-img-col{width:320px;flex-shrink:0;padding:18px;border-right:1px solid var(--rule);background:var(--dark)}
+.result-img-frame{position:relative;border-radius:var(--r-sm);overflow:hidden;aspect-ratio:4/3;background:var(--dark-2);box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+.result-img{width:100%;height:100%;object-fit:cover;display:block}
+.analysed-badge{position:absolute;bottom:10px;left:10px;background:rgba(14,17,16,.92);color:var(--ok-soft);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:5px 10px;border-radius:var(--r-xs);display:flex;align-items:center;gap:5px;border:1px solid rgba(134,239,172,.25);letter-spacing:.1em;text-transform:uppercase;backdrop-filter:blur(6px)}
+
+.result-info{flex:1;padding:30px 32px;display:flex;flex-direction:column;gap:22px}
+.breed-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--cream-dim);margin-bottom:8px;display:inline-flex;align-items:center;gap:8px}
+.breed-label::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--saffron);display:inline-block}
+.breed-name-display{
+  font-family:'Geist',sans-serif;
+  font-weight:700;font-size:38px;letter-spacing:-.03em;line-height:1;
+  color:var(--cream);
+}
+.info-k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-dim);display:block;margin-bottom:6px}
+.info-v{font-family:'Geist',sans-serif;font-size:14.5px;font-weight:500;color:var(--cream);letter-spacing:-.005em}
+.info-p{font-size:13.5px;color:var(--cream-dim);line-height:1.65}
+
+.conf-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.conf-pct{font-family:'Geist',sans-serif;font-weight:700;font-size:32px;color:var(--cream);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.conf-track{height:6px;background:var(--ink-4);border-radius:99px;overflow:hidden;position:relative}
+.conf-fill{height:100%;background:var(--saffron);border-radius:99px;width:0%;transition:width 1.1s cubic-bezier(.4,0,.2,1)}
+
+.others-list{display:flex;flex-direction:column;gap:10px}
+.other-row{display:grid;grid-template-columns:1fr 110px 50px;align-items:center;gap:14px;font-size:13px}
+.other-name{font-family:'Geist',sans-serif;color:var(--cream);font-weight:500;letter-spacing:-.005em}
+.other-bar-track{height:3px;background:var(--ink-4);border-radius:99px;overflow:hidden}
+.other-bar-fill{height:100%;background:var(--teal-soft);border-radius:99px}
+.other-pct{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cream-dim);text-align:right;font-weight:500}
+
+/* Disease panel */
+.disease-panel{
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:var(--r-md);
+  padding:30px 34px;margin-bottom:18px;
+}
+.disease-panel-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--rule-soft)}
+.disease-panel-icon{
+  width:42px;height:42px;border-radius:10px;
+  background:var(--ink-3);border:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:center;color:var(--cream-dim);flex-shrink:0;
+}
+.disease-panel-title{font-family:'Geist',sans-serif;font-weight:600;font-size:18px;letter-spacing:-.02em;color:var(--cream)}
+.disease-panel-sub{font-size:12.5px;color:var(--cream-dim);margin-top:4px;line-height:1.5}
+
+.diseases-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.disease-card{
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:var(--r-sm);
+  padding:18px;transition:border-color .25s,transform .25s cubic-bezier(.4,0,.2,1),box-shadow .25s;position:relative;overflow:hidden;
+  box-shadow:var(--sh-1);
+}
+.disease-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.disease-card.sev-high::before{background:var(--bad)}
+.disease-card.sev-med::before{background:var(--warn)}
+.disease-card.sev-low::before{background:var(--ok)}
+.disease-card:hover{border-color:var(--cream-dim);transform:translateY(-2px);box-shadow:var(--sh-2)}
+.disease-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.disease-name{font-family:'Geist',sans-serif;font-weight:600;font-size:14.5px;letter-spacing:-.015em;line-height:1.25}
+.disease-sev{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:var(--r-xs);flex-shrink:0;white-space:nowrap}
+.sev-high .disease-sev{background:rgba(185,28,28,.08);color:var(--bad);border:1px solid rgba(185,28,28,.2)}
+.sev-med .disease-sev{background:rgba(180,83,9,.08);color:var(--warn);border:1px solid rgba(180,83,9,.2)}
+.sev-low .disease-sev{background:rgba(21,128,61,.08);color:var(--ok);border:1px solid rgba(21,128,61,.2)}
+.disease-desc{font-size:12px;color:var(--cream-dim);line-height:1.6;margin-bottom:10px}
+.disease-tags{display:flex;flex-wrap:wrap;gap:5px}
+.disease-tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;padding:3px 8px;border-radius:var(--r-xs);background:rgba(247,240,225,.04);border:1px solid var(--rule);color:var(--cream-dim);letter-spacing:.06em;text-transform:uppercase}
+
+.disease-disclaimer{
+  margin-top:18px;padding:12px 16px;
+  background:var(--ink-3);border:1px solid var(--rule);border-radius:var(--r-sm);
+  font-size:12px;color:var(--cream-dim);display:flex;align-items:flex-start;gap:10px;line-height:1.55;
+  font-family:'Geist',sans-serif;
+}
+
+.result-actions{display:flex;gap:12px;margin-top:8px}
+
+/* === BREEDS === */
+.breeds-wrap{max-width:1280px;margin:0 auto;padding:60px 36px 80px;position:relative;z-index:2}
+.breeds-head{display:grid;grid-template-columns:80px 1fr 280px;gap:30px;align-items:start;margin-bottom:48px}
+.breeds-head .step-num{font-family:'Geist',sans-serif;font-style:italic;font-weight:500;font-size:64px;color:var(--cream-dim);line-height:.9;letter-spacing:-.04em;opacity:.6}
+.breeds-head h1{font-family:'Geist',sans-serif;font-weight:700;font-size:44px;letter-spacing:-.03em;line-height:1.02;margin-bottom:12px;color:var(--cream)}
+.breeds-head h1 em{font-style:italic;font-weight:600;color:var(--cream)}
+.breeds-head p{font-size:14px;color:var(--cream-dim);max-width:540px;line-height:1.6}
+.breeds-aside{
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:var(--r-md);
+  padding:16px 20px;font-family:'Geist',sans-serif;font-size:13px;color:var(--cream-dim);line-height:1.6;
+  position:relative;
+  box-shadow:var(--sh-1);
+}
+
+.breeds-filter{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap;border-bottom:1px solid var(--rule);padding-bottom:18px}
+.filter-btn{
+  font-family:'Geist',sans-serif;font-size:13px;font-weight:500;
+  padding:7px 16px;border-radius:99px;border:1px solid var(--rule);
+  background:var(--ink-2);color:var(--cream-dim);cursor:none;
+  transition:all .18s cubic-bezier(.4,0,.2,1);letter-spacing:-.01em;
+}
+.filter-btn:hover{color:var(--cream);border-color:var(--cream-dim);background:var(--ink-3)}
+.filter-btn.active{background:var(--cream);color:var(--ink-2);border-color:var(--cream);font-weight:600}
+
+.breeds-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.breed-card{
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:var(--r-md);
+  cursor:none;transition:transform .3s cubic-bezier(.4,0,.2,1),border-color .25s,box-shadow .3s;
+  overflow:hidden;position:relative;box-shadow:var(--sh-1);
+}
+.breed-card:hover{transform:translateY(-4px);border-color:var(--cream-dim);box-shadow:var(--sh-2)}
+.breed-card-illus{
+  height:130px;background:linear-gradient(170deg,var(--ink-3),var(--ink-4));
+  display:flex;align-items:center;justify-content:center;
+  border-bottom:1px solid var(--rule);position:relative;overflow:hidden;
+}
+.breed-card-illus::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle at 1.5px 1.5px,rgba(15,17,21,.06) 1.5px,transparent 1.5px);
+  background-size:14px 14px;
+  opacity:.6;
+}
+.breed-card-illus svg{width:80px;height:80px;color:var(--cream-dim);position:relative;z-index:1;transition:transform .35s cubic-bezier(.4,0,.2,1),color .25s;opacity:.85}
+.breed-card:hover .breed-card-illus svg{transform:scale(1.06) rotate(-2deg);color:var(--cream);opacity:1}
+.breed-card-num{
+  position:absolute;top:10px;left:12px;
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--cream-dim);
+  letter-spacing:.18em;background:var(--ink-2);padding:3px 7px;border-radius:var(--r-xs);
+  border:1px solid var(--rule);
+}
+.breed-card-body{padding:18px 20px}
+.breed-card-name{font-family:'Geist',sans-serif;font-weight:600;font-size:18px;letter-spacing:-.02em;line-height:1.1;margin-bottom:8px;color:var(--cream)}
+.breed-card-name em{font-style:italic;font-weight:600;color:var(--cream)}
+.breed-card-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.breed-tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 8px;border-radius:var(--r-xs);letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.breed-tag.cow{background:var(--ink-3);color:var(--cream-dim);border:1px solid var(--rule)}
+.breed-tag.purpose{background:var(--ink-3);color:var(--cream-dim);border:1px solid var(--rule)}
+.breed-card-origin{font-size:11.5px;color:var(--cream-dim);margin-bottom:8px;font-family:'Geist',sans-serif;font-weight:500}
+.breed-card-desc{font-size:12px;color:var(--cream-dim);line-height:1.55;margin-bottom:10px}
+.breed-card-trait{display:flex;flex-wrap:wrap;gap:4px}
+.trait-tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 6px;border-radius:var(--r-xs);background:rgba(247,240,225,.03);border:1px solid var(--rule-soft);color:var(--cream-dim);letter-spacing:.05em}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(13,16,11,.4);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  z-index:600;display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:var(--r-md);
+  padding:36px 40px;max-width:640px;width:100%;
+  transform:scale(.94) translateY(20px);transition:transform .35s cubic-bezier(.23,1,.32,1);
+  position:relative;max-height:90vh;overflow-y:auto;box-shadow:var(--sh-3);
+  scrollbar-width:thin;scrollbar-color:var(--rule) transparent;
+}
+.modal-overlay.open .modal-box{transform:scale(1) translateY(0)}
+.modal-close{
+  position:absolute;top:16px;right:16px;
+  background:transparent;border:1px solid var(--rule);border-radius:50%;
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  cursor:none;font-size:14px;color:var(--cream-dim);transition:all .2s;
+}
+.modal-close:hover{color:var(--cream);border-color:var(--saffron);background:var(--saffron-tint)}
+
+.modal-illus{
+  width:90px;height:90px;background:var(--ink-3);
+  border:1px solid var(--rule);border-radius:14px;
+  display:flex;align-items:center;justify-content:center;color:var(--saffron);
+  margin-bottom:18px;
+}
+.modal-illus svg{width:56px;height:56px}
+.modal-breed-name{font-family:'Geist',sans-serif;font-weight:700;font-size:32px;letter-spacing:-.03em;line-height:1;margin-bottom:8px;color:var(--cream)}
+.modal-breed-name em{font-style:italic;font-weight:600;color:var(--cream)}
+.modal-body{margin-top:22px;display:flex;flex-direction:column;gap:12px}
+.modal-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-field{background:var(--ink-3);border:1px solid var(--rule);border-radius:var(--r-sm);padding:14px 16px}
+.mf-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-dim);margin-bottom:6px;display:block}
+.mf-val{font-family:'Geist',sans-serif;font-size:14.5px;font-weight:500;color:var(--cream);letter-spacing:-.005em}
+.mf-desc{font-size:13px;color:var(--cream-dim);line-height:1.6}
+
+.modal-disease-list{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.mdl-disease{background:var(--ink-2);border:1px solid var(--rule);border-radius:var(--r-xs);padding:10px 14px;display:flex;align-items:center;gap:12px}
+.mdl-disease-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.mdl-disease-name{font-family:'Geist',sans-serif;font-size:13.5px;font-weight:500;color:var(--cream);flex:1}
+.mdl-disease-sev{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:600;padding:2px 7px;border-radius:var(--r-xs);letter-spacing:.1em;text-transform:uppercase}
+
+/* === ABOUT === */
+.about-wrap{max-width:1280px;margin:0 auto;padding:60px 36px 80px;position:relative;z-index:2}
+.about-hero{max-width:820px;margin:0 auto 80px;text-align:center}
+.about-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.22em;
+  color:var(--cream-dim);text-transform:uppercase;
+  border:1px solid var(--rule);background:var(--ink-2);padding:8px 18px;border-radius:99px;margin-bottom:32px;
+  box-shadow:var(--sh-1);
+}
+.about-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--saffron)}
+.about-title{
+  font-family:'Geist',sans-serif;
+  font-weight:700;font-size:clamp(36px,5vw,60px);letter-spacing:-.04em;
+  line-height:1.02;margin-bottom:24px;color:var(--cream);
+}
+.about-title em{font-style:italic;font-weight:600;color:var(--cream)}
+.about-sub{font-size:17px;color:var(--cream-dim);line-height:1.7}
+
+.divider{
+  height:1px;background:var(--rule);margin:60px 0;position:relative;
+}
+.divider::before{
+  content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:6px;height:6px;border-radius:50%;background:var(--saffron);
+  box-shadow:0 0 0 6px var(--ink);
+}
+
+.section-h{font-family:'Geist',sans-serif;font-weight:700;font-size:30px;letter-spacing:-.03em;margin-bottom:32px;line-height:1.05;color:var(--cream)}
+.section-h em{font-style:italic;font-weight:600;color:var(--cream)}
+
+.tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.tech-card{
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:var(--r-md);
+  padding:26px 28px;display:flex;flex-direction:column;gap:14px;
+  transition:transform .3s,border-color .25s;
+}
+.tech-card:hover{transform:translateY(-4px);border-color:var(--saffron-deep)}
+.tech-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:var(--cream-dim);text-transform:uppercase}
+.tech-t{font-family:'Geist',sans-serif;font-weight:600;font-size:19px;letter-spacing:-.02em;line-height:1.2;color:var(--cream)}
+.tech-t em{font-style:italic;font-weight:600;color:var(--cream)}
+.tech-d{font-size:13px;color:var(--cream-dim);line-height:1.65}
+
+.authors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.author-card{
+  background:var(--ink-2);border:1px solid var(--rule);border-radius:var(--r-md);
+  padding:22px 22px;transition:transform .3s cubic-bezier(.4,0,.2,1),border-color .25s,box-shadow .3s;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:var(--sh-1);
+}
+.author-card:hover{transform:translateY(-3px);border-color:var(--cream-dim);box-shadow:var(--sh-2)}
+.author-avatar{
+  width:44px;height:44px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(155deg,#2a2e35,#0f1115);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Geist',sans-serif;font-weight:600;font-size:14px;color:#ffffff;
+  letter-spacing:-.01em;
+  box-shadow:0 0 0 1px rgba(15,17,21,.08),inset 0 1px 0 rgba(255,255,255,.08);
+}
+.author-name{font-family:'Geist',sans-serif;font-weight:600;font-size:14.5px;letter-spacing:-.01em;line-height:1.1;color:var(--cream)}
+.author-role{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--cream-dim);letter-spacing:.16em;text-transform:uppercase;margin-top:4px}
+
+/* === BUILT BY — team credits strip on home page === */
+.builders{
+  margin:80px auto 60px;max-width:920px;padding:0 var(--side);
+  text-align:center;
+}
+.builders-line{
+  width:60px;height:1px;background:var(--rule);margin:0 auto;
+}
+.builders-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;
+  color:var(--ink-soft);text-transform:uppercase;font-weight:600;
+  margin:28px 0 16px;
+}
+.builders-title{
+  font-family:'Geist',sans-serif;font-weight:700;font-size:32px;letter-spacing:-.03em;line-height:1.05;
+  color:var(--ink-1);margin-bottom:36px;
+}
+.builders-title em{font-style:italic;font-weight:600}
+.builders-grid{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:18px;
+  margin-bottom:36px;
+}
+.builder-card{
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  padding:18px 12px;background:var(--card);border:1px solid var(--rule);border-radius:var(--r-md);
+  transition:border-color .25s,transform .25s cubic-bezier(.4,0,.2,1),box-shadow .25s;
+  cursor:default;
+}
+.builder-card:hover{transform:translateY(-3px);border-color:var(--ink-3);box-shadow:var(--sh-2)}
+.builder-avatar{
+  width:48px;height:48px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Geist',sans-serif;font-weight:700;font-size:16px;letter-spacing:-.02em;
+  color:var(--cream);background:var(--ink-1);
+  border:1px solid var(--ink-3);
+}
+.builder-name{
+  font-family:'Geist',sans-serif;font-weight:600;font-size:13px;letter-spacing:-.01em;
+  color:var(--ink-1);text-align:center;line-height:1.2;
+}
+
+/* WHY MODAL ROWS */
+.why-row{display:flex;align-items:flex-start;gap:14px;background:var(--ink-2);border:1px solid var(--rule);border-radius:var(--r-sm);padding:14px 16px;transition:border-color .2s,background .2s}
+.why-row:hover{border-color:var(--cream-dim);background:var(--ink-3)}
+.why-icon{
+  font-family:'Geist',sans-serif;font-weight:600;font-size:14px;
+  flex-shrink:0;width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  background:var(--ink-3);border:1px solid var(--rule);border-radius:8px;color:var(--cream);
+  letter-spacing:-.02em;
+}
+.why-t{font-family:'Geist',sans-serif;font-weight:600;font-size:13.5px;margin-bottom:3px;letter-spacing:-.01em;color:var(--cream)}
+.why-d{font-size:12px;color:var(--cream-dim);line-height:1.55}
+
+/* TOAST */
+.toast{position:fixed;bottom:30px;right:30px;background:var(--dark);border:1px solid var(--dark-3);color:var(--on-dark);padding:13px 20px;border-radius:var(--r-sm);font-family:'Geist',sans-serif;font-size:13.5px;font-weight:500;z-index:700;animation:sIn .3s ease,sOut .3s 2.5s ease forwards;box-shadow:var(--sh-3);display:flex;align-items:center;gap:10px;letter-spacing:-.005em}
+@keyframes sIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes sOut{to{transform:translateY(10px);opacity:0}}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--rule);padding:32px 36px;position:relative;z-index:2;
+  background:var(--ink-3);
+}
+.footer-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;align-items:center}
+.foot-brand{display:flex;align-items:center;gap:12px;font-family:'Geist',sans-serif;font-size:14px;color:var(--cream-dim);font-weight:400}
+.foot-brand strong{color:var(--cream);font-weight:600}
+.foot-center{text-align:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:var(--cream-dim);text-transform:uppercase}
+.foot-right{text-align:right;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--cream-dim);text-transform:uppercase}
+
+/* === Responsive === */
+@media(max-width:1100px){
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .hero-3d{height:420px}
+  .breeds-grid{grid-template-columns:repeat(3,1fr)}
+  .uc-grid{grid-template-columns:repeat(2,1fr)}
+  .uc-card:nth-child(2),.uc-card:nth-child(3),.uc-card:nth-child(4){margin-top:0}
+  .figures{grid-template-columns:1fr;gap:32px}
+  .figures-head{position:static}
+  .breeds-head{grid-template-columns:1fr;gap:18px}
+  .det-head{grid-template-columns:1fr;gap:14px}
+  .det-head .step-num{font-size:64px}
+  .breeds-aside{order:3}
+}
+@media(max-width:760px){
+  .nav-mini .sep{display:none}
+  .nav-inner{padding:0 22px;height:60px;gap:8px}
+  .nav-links{gap:0}
+  .nlink{padding:7px 9px;font-size:12px}
+  .brand-text{display:none}
+  .hero{padding:50px 22px 50px}
+  .hero-stamp{display:none}
+  .marquee-track{font-size:22px}
+  .figures{padding:40px 22px}
+  .section{padding:60px 22px}
+  .det-wrap{padding:40px 22px}
+  .breeds-wrap{padding:40px 22px}
+  .about-wrap{padding:40px 22px}
+  .steps{grid-template-columns:1fr}
+  .step{border-right:none;border-bottom:1px solid var(--rule)}
+  .step:last-child{border-bottom:none}
+  .uc-grid{grid-template-columns:1fr}
+  .breeds-grid{grid-template-columns:repeat(2,1fr)}
+  .tech-grid{grid-template-columns:1fr}
+  .authors-grid{grid-template-columns:repeat(2,1fr)}
+  .builders-grid{grid-template-columns:repeat(3,1fr)}
+  .builders-title{font-size:24px}
+  .problem-grid{grid-template-columns:1fr;gap:14px}
+  .problem-stats{grid-template-columns:repeat(2,1fr);gap:24px}
+  .problem-solution{padding:32px 24px}
+  .tip-row{grid-template-columns:1fr}
+  .diseases-grid{grid-template-columns:1fr}
+  .result-card{flex-direction:column}
+  .result-img-col{width:100%;border-right:none;border-bottom:1px solid var(--rule)}
+  .footer-inner{grid-template-columns:1fr;text-align:center;gap:14px}
+  .foot-center,.foot-right{text-align:center}
+  body{cursor:auto}
+  #cur,#cur-r{display:none}
+  .hero-title{font-size:46px}
+  .det-head h1,.breeds-head h1{font-size:34px}
+  .modal-box{padding:28px 24px}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<!-- NAVBAR -->
+<nav class="nav-strip">
+  <div class="nav-mini">
+    <span><span class="pulse"></span>NEURAL CORE ONLINE</span>
+    <span class="sep">◆</span>
+    <span>RESNET-50 / 23.5M PARAMS</span>
+    <span class="sep">◆</span>
+    <span>8 BREEDS · 14,082 IMAGES</span>
+    <span class="sep">◆</span>
+    <span>FOCUSED AI · ONE JOB ONLY</span>
+  </div>
+  <div class="nav-inner">
+    <a class="brand" onclick="showPage('home')">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <!-- horns -->
+          <path d="M8 5.5C7.4 4 6.4 3 5 2.8M16 5.5c.6-1.5 1.6-2.5 3-2.7"/>
+          <!-- ears -->
+          <path d="M5.5 9C3.5 8.5 2.5 9.5 2.5 10.5s1 1.8 3 1.6"/>
+          <path d="M18.5 9c2-.5 3 .5 3 1.5s-1 1.8-3 1.6"/>
+          <!-- face shape -->
+          <path d="M12 4.5c-3.6 0-5.7 1.8-6.3 4.6-.3 1.4 0 2.8.3 3.9v3c0 1.5 1 2.9 2.8 3.7l1 .4 1 1.4h2.4l1-1.4 1-.4c1.8-.8 2.8-2.2 2.8-3.7v-3c.3-1.1.6-2.5.3-3.9C17.7 6.3 15.6 4.5 12 4.5z"/>
+          <!-- eyes -->
+          <circle cx="9.3" cy="12.5" r=".7" fill="currentColor"/>
+          <circle cx="14.7" cy="12.5" r=".7" fill="currentColor"/>
+          <!-- snout -->
+          <ellipse cx="12" cy="17" rx="2.7" ry="1.7"/>
+          <!-- nostrils -->
+          <circle cx="10.7" cy="17" r=".35" fill="currentColor"/>
+          <circle cx="13.3" cy="17" r=".35" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">PashuAI</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <button class="nlink active" id="nav-home" onclick="showPage('home')">Home</button>
+      <button class="nlink" id="nav-detect" onclick="showPage('detect')">Identify</button>
+      <button class="nlink" id="nav-problem" onclick="showPage('problem')">Problem</button>
+      <div class="dropdown">
+        <button class="nlink" id="nav-breeds" onclick="showPage('breeds')">Breeds ▾</button>
+        <div class="dpanel" id="dropdownPanel">
+          <div class="dpanel-head">
+            <span class="lbl">Catalog · 08 specimens</span>
+            <span class="ct">Indigenous to India</span>
+          </div>
+        </div>
+      </div>
+      <button class="nlink" id="nav-about" onclick="showPage('about')">Notes</button>
+      <button class="cta" onclick="showPage('detect')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Identify Breed
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- BREED MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    <div class="modal-illus" id="mIllus"></div>
+    <div class="modal-breed-name" id="mName"></div>
+    <div id="mType"></div>
+    <div class="modal-body">
+      <div class="modal-row">
+        <div class="modal-field"><span class="mf-label">Origin</span><div class="mf-val" id="mOrigin"></div></div>
+        <div class="modal-field"><span class="mf-label">Purpose</span><div class="mf-val" id="mPurpose"></div></div>
+      </div>
+      <div class="modal-field"><span class="mf-label">Description</span><p class="mf-desc" id="mDesc" style="margin-top:6px"></p></div>
+      <div class="modal-field"><span class="mf-label">Key Traits</span><div id="mTraits" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:5px"></div></div>
+      <div class="modal-field"><span class="mf-label">Diseases to Watch</span><div class="modal-disease-list" id="mDiseases"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============== HOME ============== -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="hero-eyebrow"><span class="num">№ 01</span> · INDIA · v2.4</div>
+        <h1 class="hero-title">
+          AI that knows every <em class="em">cow</em> in <span class="underline">India</span>.
+        </h1>
+        <p class="hero-sub">PashuAI is a free AI tool that identifies Indian cow breeds from a single photo. Trained on <strong>14,200 pictures</strong> of 8 native breeds. Just upload a photo — get the breed name, where it's from, and common health risks in 2 seconds. No vet, no expert, no fees.</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="showPage('detect')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            Show me a cow
+          </button>
+          <button class="btn-secondary" onclick="showPage('breeds')">Browse the herd</button>
+          <button class="btn-link" onclick="document.getElementById('whyModalOverlay').classList.add('open')">why this exists</button>
+        </div>
+        <div class="hero-meta">
+          <span><span class="dot green"></span>23.5M PARAMETERS</span>
+          <span><span class="dot"></span>8 BREEDS LEARNED</span>
+          <span><span class="dot teal"></span>~85% TOP-1 ACCURACY</span>
+        </div>
+      </div>
+
+      <div class="hero-right" style="position:relative">
+        <div class="hero-stamp">
+          <span class="stamp-num">85.7%</span>
+          <div class="stamp-meta">
+            <span class="stamp-label">Accuracy</span>
+            <span class="stamp-sub">on validation</span>
+          </div>
+        </div>
+        <div class="hero-3d">
+          <span class="hero-3d-tl"></span><span class="hero-3d-tr"></span><span class="hero-3d-bl"></span><span class="hero-3d-br"></span>
+          <div class="hero-3d-label"><span class="blink">●</span> <span id="mockup-status">SCANNING…</span></div>
+
+          <!-- Image area with detection overlay -->
+          <div class="mockup-area">
+            <div class="mockup-image-wrap">
+              <canvas id="hero3d-canvas" class="mockup-img"></canvas>
+              <div class="mockup-img-fallback">
+                <svg viewBox="0 0 200 110" fill="none">
+                  <path d="M30 70 Q30 56 44 52 Q48 38 62 33 Q76 31 82 42 L90 52 L100 38 Q116 18 132 38 L140 52 L172 52 Q186 52 188 62 Q188 76 174 76 L52 76 Q34 76 32 70 Z" fill="currentColor"/>
+                  <rect x="56" y="76" width="6" height="28" rx="1" fill="currentColor"/>
+                  <rect x="74" y="76" width="6" height="28" rx="1" fill="currentColor"/>
+                  <rect x="148" y="76" width="6" height="28" rx="1" fill="currentColor"/>
+                  <rect x="164" y="76" width="6" height="28" rx="1" fill="currentColor"/>
+                  <path d="M188 62 Q200 66 196 80" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>
+                  <path d="M52 32 L48 22" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                  <circle cx="54" cy="44" r="1.5" fill="#0e1110"/>
+                </svg>
+              </div>
+
+              <!-- Detection overlay -->
+              <div class="mockup-overlay">
+                <!-- bounding box -->
+                <div class="mockup-bbox">
+                  <span class="bbox-corner tl"></span>
+                  <span class="bbox-corner tr"></span>
+                  <span class="bbox-corner bl"></span>
+                  <span class="bbox-corner br"></span>
+                  <span class="mockup-bbox-label">BOS INDICUS</span>
+                  <span class="mockup-bbox-conf">94.7%</span>
+                </div>
+                <!-- feature markers -->
+                <div class="mockup-feat-group" style="top:30%;left:52%">
+                  <span class="mockup-feat"></span>
+                  <span class="mockup-feat-label">HUMP</span>
+                </div>
+                <div class="mockup-feat-group" style="top:55%;left:35%">
+                  <span class="mockup-feat"></span>
+                  <span class="mockup-feat-label">DEWLAP</span>
+                </div>
+                <div class="mockup-feat-group" style="top:22%;left:38%">
+                  <span class="mockup-feat"></span>
+                  <span class="mockup-feat-label">HORN</span>
+                </div>
+                <!-- scan line -->
+                <div class="mockup-scanline"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result data card -->
+          <div class="mockup-data">
+            <div class="mockup-breed-info">
+              <span class="mockup-breed-name">Sahiwal</span>
+              <span class="mockup-breed-meta">Punjab · Dairy breed</span>
+            </div>
+            <div class="mockup-conf-block">
+              <span class="mockup-conf-num">94.7<span style="font-size:.7em">%</span></span>
+              <div class="mockup-conf-bar"><div class="mockup-conf-fill"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquee -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>Amritmahal <span class="star">✦</span> hump detection <span class="star">✦</span> Sahiwal <span class="star">✦</span> dewlap morphology <span class="star">✦</span> Bachaur <span class="star">✦</span> horn curvature <span class="star">✦</span> Lakhimi <span class="star">✦</span> coat texture <span class="star">✦</span> Badri <span class="star">✦</span> body silhouette <span class="star">✦</span> Siri <span class="star">✦</span> Umblachery <span class="star">✦</span> Ayrshire <span class="star">✦</span></span>
+      <span>Amritmahal <span class="star">✦</span> hump detection <span class="star">✦</span> Sahiwal <span class="star">✦</span> dewlap morphology <span class="star">✦</span> Bachaur <span class="star">✦</span> horn curvature <span class="star">✦</span> Lakhimi <span class="star">✦</span> coat texture <span class="star">✦</span> Badri <span class="star">✦</span> body silhouette <span class="star">✦</span> Siri <span class="star">✦</span> Umblachery <span class="star">✦</span> Ayrshire <span class="star">✦</span></span>
+    </div>
+  </div>
+
+  <!-- Figures -->
+  <div class="figures">
+    <div class="figures-head">
+      <span class="lbl">Fig. I — The model card</span>
+      <h3>What this <em>intelligence</em> knows.</h3>
+      <p>The mind, by the numbers. All figures from the held-out validation split (n = 1,400 cattle photographs).</p>
+    </div>
+    <div class="figures-table">
+      <div class="fig-row reveal">
+        <span class="num">01</span>
+        <div><div class="label">Breeds in dataset</div><div class="desc">Eight indigenous Indian cattle, hand-curated</div></div>
+        <span class="desc">Cattle (8) · Buffalo (0)</span>
+        <span class="value"><span class="counter" data-target="8" data-suffix="">0</span></span>
+      </div>
+      <div class="fig-row reveal delay-1">
+        <span class="num">02</span>
+        <div><div class="label">Training images</div><div class="desc">After augmentation (rotate · flip · scale)</div></div>
+        <span class="desc">Source: field photographs, ICAR archives</span>
+        <span class="value"><span class="counter" data-target="14082" data-comma="1">0</span></span>
+      </div>
+      <div class="fig-row reveal delay-2">
+        <span class="num">03</span>
+        <div><div class="label">Top-1 accuracy</div><div class="desc">On held-out validation split</div></div>
+        <span class="desc">Top-3 accuracy: 96.4%</span>
+        <span class="value"><span class="counter" data-target="85.7" data-decimals="1" data-suffix="%">0</span></span>
+      </div>
+      <div class="fig-row reveal delay-3">
+        <span class="num">04</span>
+        <div><div class="label">Inference time</div><div class="desc">Single image, CPU-only deployment</div></div>
+        <span class="desc">Avg. measured on Intel i5</span>
+        <span class="value"><span class="counter" data-target="1.2" data-decimals="1" data-suffix="s">0</span></span>
+      </div>
+      <div class="fig-row reveal delay-4">
+        <span class="num">05</span>
+        <div><div class="label">Diseases tracked</div><div class="desc">Curated from veterinary literature</div></div>
+        <span class="desc">Severity-graded · breed-specific</span>
+        <span class="value"><span class="counter" data-target="25" data-suffix="+">0</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="section">
+    <div class="sec-head">
+      <div>
+        <span class="sec-eyebrow">Fig. II — Procedure</span>
+        <h2 class="sec-title">How a small intelligence<br><em>looks at a cow.</em></h2>
+      </div>
+      <div class="sec-aside">PashuAI does one thing — it identifies Indian cow breeds. It can't write essays or play chess. But it knows cows better than most people will in a lifetime. Here's how it works, step by step.</div>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+        <span class="step-num"><em>i.</em></span>
+        <div class="step-title">A photograph enters the network</div>
+        <p class="step-desc">A clear lateral view in daylight is best. JPG or PNG, up to 10MB. The image is processed and discarded — never written to disk.</p>
+      </div>
+      <div class="step reveal delay-1">
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><circle cx="4" cy="6" r="1.5"/><circle cx="20" cy="6" r="1.5"/><circle cx="4" cy="18" r="1.5"/><circle cx="20" cy="18" r="1.5"/><line x1="5.5" y1="6.7" x2="10.5" y2="11"/><line x1="18.5" y1="6.7" x2="13.5" y2="11"/><line x1="5.5" y1="17.3" x2="10.5" y2="13"/><line x1="18.5" y1="17.3" x2="13.5" y2="13"/></svg>
+        <span class="step-num"><em>ii.</em></span>
+        <div class="step-title">Fifty layers read the animal</div>
+        <p class="step-desc">Convolutional layers extract <em>hump curvature</em>, dewlap shape, horn arc, coat micro-texture and body silhouette — features even seasoned vets weigh by feel. The network has learned to see what we look at.</p>
+      </div>
+      <div class="step reveal delay-2">
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 3-3 4 4 5-6"/></svg>
+        <span class="step-num"><em>iii.</em></span>
+        <div class="step-title">A breed name, with reasons</div>
+        <p class="step-desc">A ranked list of probable breeds with confidence, lineage, regional origin, and a curated set of diseases the breed is statistically prone to. Grad-CAM heatmaps explain <em>why</em> the model decided what it did.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Use cases -->
+  <div class="section" style="padding-top:0">
+    <div class="sec-head">
+      <div>
+        <span class="sec-eyebrow">Fig. III — Audience</span>
+        <h2 class="sec-title">For everyone who works <em>with cattle.</em></h2>
+      </div>
+      <div class="sec-aside">Designed for low-bandwidth field use. Accessible from any smartphone, no app required, no signup wall.</div>
+    </div>
+    <div class="uc-grid">
+      <div class="uc-card reveal">
+        <span class="uc-num">— FOR FARMERS</span>
+        <div class="uc-illus"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 38V18l16-10 16 10v20"/><path d="M16 38V26h16v12"/><path d="M22 38v-6h4v6"/></svg></div>
+        <div class="uc-t">Farmers</div>
+        <p class="uc-d">Verify breed claims at the cattle market. Understand exactly what care, feed and shelter your animal needs — without paying for a vet visit.</p>
+      </div>
+      <div class="uc-card reveal delay-1">
+        <span class="uc-num">— FOR VETS</span>
+        <div class="uc-illus"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 6v36"/><path d="M6 24h36"/><circle cx="24" cy="24" r="14"/></svg></div>
+        <div class="uc-t">Veterinarians</div>
+        <p class="uc-d">Confirm breed during field visits and instantly cross-reference breed-specific disease susceptibilities to inform diagnosis on the spot.</p>
+      </div>
+      <div class="uc-card reveal delay-2">
+        <span class="uc-num">— FOR SCIENCE</span>
+        <div class="uc-illus"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6h20"/><path d="M16 6v14L8 38h32L32 20V6"/><path d="M14 28h20"/></svg></div>
+        <div class="uc-t">Researchers</div>
+        <p class="uc-d">Automate cattle classification in field studies. Scale dataset construction for livestock genetics, conservation and productivity research.</p>
+      </div>
+      <div class="uc-card reveal delay-3">
+        <span class="uc-num">— FOR POLICY</span>
+        <div class="uc-illus"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 4 6 12v10c0 12 8 20 18 22 10-2 18-10 18-22V12L24 4z"/><path d="m18 22 4 4 8-8"/></svg></div>
+        <div class="uc-t">Govt. & NGOs</div>
+        <p class="uc-d">Support indigenous breed conservation schemes and national livestock census efforts with automated, scalable identification tools.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== BUILT BY (TEAM CREDITS) ============== -->
+  <div class="builders reveal">
+    <div class="builders-line"></div>
+    <div class="builders-eyebrow">BUILT BY · TEAM № 04</div>
+    <h3 class="builders-title">Six builders<em>, </em>one mission.</h3>
+    <div class="builders-grid">
+      <div class="builder-card"><span class="builder-avatar">G</span><div class="builder-name">Gavish</div></div>
+      <div class="builder-card"><span class="builder-avatar">VK</span><div class="builder-name">Vivek Kumar</div></div>
+      <div class="builder-card"><span class="builder-avatar">AB</span><div class="builder-name">Amritanshu Bharti</div></div>
+      <div class="builder-card"><span class="builder-avatar">YT</span><div class="builder-name">Yashraj Tiwari</div></div>
+      <div class="builder-card"><span class="builder-avatar">JR</span><div class="builder-name">Janvi Rajput</div></div>
+      <div class="builder-card"><span class="builder-avatar">AS</span><div class="builder-name">Ansh Sharma</div></div>
+    </div>
+    <div class="builders-line"></div>
+  </div>
+</div>
+
+<!-- ============== DETECT ============== -->
+<div class="page" id="page-detect">
+  <div class="det-wrap">
+    <div class="det-head">
+      <div class="step-num"><em>i.</em></div>
+      <div>
+        <h1>Upload a <em>photograph</em><br>for identification.</h1>
+        <p>A clear lateral side-profile of the animal works best. JPG, PNG, or JPEG. Up to 10MB. Image is processed and discarded — never written to disk.</p>
+      </div>
+    </div>
+
+    <div class="tip-row">
+      <div class="tip">
+        <svg class="tip-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="m3 16 5-5 4 4 4-4 5 5"/><circle cx="8" cy="11" r="1.5"/></svg>
+        <div><div class="tip-t">Side-profile</div><div class="tip-d">Full lateral view shows hump, horn curve, dewlap.</div></div>
+      </div>
+      <div class="tip">
+        <svg class="tip-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <div><div class="tip-t">Daylight</div><div class="tip-d">Natural light reveals coat colour faithfully.</div></div>
+      </div>
+      <div class="tip">
+        <svg class="tip-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <div><div class="tip-t">Unobstructed</div><div class="tip-d">Avoid heavy shadows and visual clutter.</div></div>
+      </div>
+    </div>
+
+    <label class="dz" id="dropZone">
+      <input type="file" id="fileInput" accept="image/*" onchange="handleFile(this)">
+      <div class="dz-idle" id="dropIdle">
+        <div class="dz-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+        <p class="dz-main">Drop your photograph here</p>
+        <p class="dz-hint">or <span>click to browse files</span> · JPG / PNG · 10MB max</p>
+      </div>
+      <div class="dz-ready" id="dropReady" style="display:none">
+        <img id="previewThumb" class="preview-thumb" alt="preview">
+        <div>
+          <div class="preview-name" id="previewName"></div>
+          <div class="preview-change">click to change image</div>
+        </div>
+      </div>
+    </label>
+
+    <button class="detect-go" id="detectBtn" onclick="uploadImage()" disabled>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Identify Breed
+    </button>
+
+    <div class="loading-wrap" id="loadingWrap" style="display:none">
+      <div style="text-align:center;max-width:400px;width:100%">
+        <div class="spinner"></div>
+        <p class="loading-msg" id="loadingMsg">Initialising model…</p>
+        <div class="loading-bar-wrap"><div class="loading-bar-fill"></div></div>
+      </div>
+    </div>
+
+    <div class="result-wrap" id="resultWrap">
+      <div class="det-head" style="margin-top:60px">
+        <div class="step-num"><em>ii.</em></div>
+        <div>
+          <h1><em>Identification</em><br>complete.</h1>
+          <p>Below, the most probable breed and runners-up. All confidence scores derive from the model's softmax output on the final classification layer.</p>
+        </div>
+      </div>
+
+      <div class="result-card">
+        <div class="result-img-col">
+          <div class="result-img-frame">
+            <img id="previewImage" class="result-img" alt="analysed">
+            <div class="analysed-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Analysed</div>
+          </div>
+        </div>
+        <div class="result-info">
+          <div>
+            <span class="breed-label">Predicted Breed</span>
+            <div class="breed-name-display" id="breed"></div>
+          </div>
+          <div>
+            <div class="conf-row">
+              <span class="info-k" style="margin-bottom:0">Confidence</span>
+              <span class="conf-pct" id="confidence"></span>
+            </div>
+            <div class="conf-track"><div class="conf-fill" id="confFill"></div></div>
+          </div>
+          <div><span class="info-k">Origin</span><span class="info-v" id="origin"></span></div>
+          <div><span class="info-k">Description</span><p class="info-p" id="description"></p></div>
+          <div><span class="info-k">Runner-up Predictions</span><div id="others" class="others-list"></div></div>
+        </div>
+      </div>
+
+      <div class="disease-panel" id="diseasePanelWrap">
+        <div class="disease-panel-header">
+          <div class="disease-panel-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
+          </div>
+          <div>
+            <div class="disease-panel-title">Diseases to monitor for this breed</div>
+            <div class="disease-panel-sub">Statistical breed-specific susceptibilities. Always consult a licensed veterinarian for diagnosis.</div>
+          </div>
+        </div>
+        <div class="diseases-grid" id="diseaseGrid"></div>
+        <div class="disease-disclaimer">
+          <span style="flex-shrink:0">⚠</span>
+          <span>Disease incidence varies by region, season, and herd-management practice. This information is educational, not diagnostic.</span>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn-secondary" onclick="resetDetect()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.12"/></svg>
+          Analyse another
+        </button>
+        <button class="btn-primary" onclick="downloadReport()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download report
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============== BREEDS ============== -->
+<div class="page" id="page-breeds">
+  <div class="breeds-wrap">
+    <div class="breeds-head">
+      <div class="step-num"><em>ii.</em></div>
+      <div>
+        <h1>Eight breeds.<br>One <em>intelligence</em> that knows them.</h1>
+        <p>India is home to over 50 indigenous cattle breeds. These eight live in the model's memory — every photograph it has ever seen during training was of one of them. Each card opens a deeper note on origin, traits, and breed-specific disease susceptibilities.</p>
+      </div>
+      <div class="breeds-aside">"A model that knows fifty things knows none of them well. PashuAI knows eight breeds — and knows them like a vet who has spent a lifetime in the field."</div>
+    </div>
+    <div class="breeds-filter">
+      <button class="filter-btn active" onclick="filterBreeds('all',this)">All breeds</button>
+      <button class="filter-btn" onclick="filterBreeds('cow',this)">Cattle only</button>
+      <button class="filter-btn" onclick="filterBreeds('draught',this)">Draught</button>
+      <button class="filter-btn" onclick="filterBreeds('dairy',this)">Dairy</button>
+    </div>
+    <div class="breeds-grid" id="breedsGrid"></div>
+  </div>
+</div>
+
+<!-- ============== ABOUT ============== -->
+<div class="page" id="page-about">
+  <div class="about-wrap">
+    <div class="about-hero">
+      <div class="about-badge"><span class="dot"></span>NOTES · ONE JOB · DONE WELL</div>
+      <h1 class="about-title">A small intelligence,<br>tuned to <em>one species.</em></h1>
+      <p class="about-sub">Most AI tools try to do everything. PashuAI does <em>one thing</em> well — it identifies Indian cow breeds. We trained it on thousands of cattle photos so it can recognise breeds as well as a trained vet. Built specially for India, where breed experts are hard to find in rural areas.</p>
+    </div>
+
+    <div class="figures" style="border:none;padding:0;margin-bottom:60px">
+      <div class="figures-head">
+        <span class="lbl">Project · Numbers</span>
+        <h3>The model, <em>concisely.</em></h3>
+        <p>What we trained, on what, and how well it works.</p>
+      </div>
+      <div class="figures-table">
+        <div class="fig-row">
+          <span class="num">A</span>
+          <div><div class="label">Architecture</div><div class="desc">ResNet-50 fine-tuned from ImageNet weights</div></div>
+          <span class="desc">Transfer learning · frozen lower layers</span>
+          <span class="value" style="font-size:22px">ResNet-50</span>
+        </div>
+        <div class="fig-row">
+          <span class="num">B</span>
+          <div><div class="label">Framework</div><div class="desc">Python, TensorFlow 2.x, served via Flask</div></div>
+          <span class="desc">PIL preprocessing pipeline</span>
+          <span class="value" style="font-size:22px">TensorFlow</span>
+        </div>
+        <div class="fig-row">
+          <span class="num">C</span>
+          <div><div class="label">Augmentation</div><div class="desc">Rotation, horizontal flip, scale, brightness</div></div>
+          <span class="desc">Reduces overfitting on small classes</span>
+          <span class="value" style="font-size:22px">5×</span>
+        </div>
+        <div class="fig-row">
+          <span class="num">D</span>
+          <div><div class="label">Validation accuracy</div><div class="desc">On 20% held-out split, balanced sampling</div></div>
+          <span class="desc">Top-3: 96.4% · Macro F1: 0.84</span>
+          <span class="value">85.7%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <h2 class="section-h">Technology, <em>plainly.</em></h2>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <span class="tech-num">01 / NEURAL ARCHITECTURE</span>
+        <div class="tech-t">ResNet-50 with <em>transfer learning</em></div>
+        <p class="tech-d">Fifty-layer residual network pre-trained on ImageNet, then fine-tuned for 42 epochs on 14,000+ Indian cattle photographs. Skip-connections allow effective gradient flow despite the network's depth.</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-num">02 / SERVING STACK</span>
+        <div class="tech-t">Flask backend, <em>Pythonic</em> and lean</div>
+        <p class="tech-d">A modest Flask REST API handles uploads, PIL preprocessing (resize · normalize), ResNet inference, and structured JSON responses. Sub-second latency on commodity CPU hardware.</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-num">03 / EXPLAINABILITY</span>
+        <div class="tech-t">Grad-CAM, so the <em>model can show its work</em></div>
+        <p class="tech-d">Gradient-weighted Class Activation Maps highlight which regions of the image drove the prediction — useful for non-expert users who want to verify that the model is looking at the animal, not the background.</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-num">04 / CLIENT</span>
+        <div class="tech-t">A web frontend designed for the <em>field</em></div>
+        <p class="tech-d">Lightweight HTML/CSS/JS with drag-and-drop upload, animated confidence visualisation, breed disease insights, and downloadable plain-text reports. Works on weak connections, any device.</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <h2 class="section-h">Performance, <em>honestly.</em></h2>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <span class="tech-num">— TRAINING DYNAMICS</span>
+        <div class="tech-t">Loss curve <em>convergence</em></div>
+        <p class="tech-d">Training loss decreases from ~1.15 to below 0.15 across epochs, indicating strong feature convergence. Validation loss stabilises early thanks to data augmentation and dropout regularisation.</p>
+      </div>
+      <div class="tech-card">
+        <span class="tech-num">— KNOWN LIMITATIONS</span>
+        <div class="tech-t">Where the model still <em>stumbles</em></div>
+        <p class="tech-d">Sahiwal and Lakhimi share similar reddish-brown coat patterns; the model occasionally confuses them — a well-known challenge in fine-grained breed classification. Future work: expand the dataset and add multi-view input.</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <h2 class="section-h">The <em>team</em>.</h2>
+    <div class="authors-grid">
+      <div class="author-card"><div class="author-avatar">G</div><div><div class="author-name">Gavish</div><div class="author-role">Researcher</div></div></div>
+      <div class="author-card"><div class="author-avatar">VK</div><div><div class="author-name">Vivek Kumar</div><div class="author-role">Researcher</div></div></div>
+      <div class="author-card"><div class="author-avatar">AB</div><div><div class="author-name">Amritanshu Bharti</div><div class="author-role">Researcher</div></div></div>
+      <div class="author-card"><div class="author-avatar">YT</div><div><div class="author-name">Yashraj Tiwari</div><div class="author-role">Researcher</div></div></div>
+      <div class="author-card"><div class="author-avatar">JR</div><div><div class="author-name">Janvi Rajput</div><div class="author-role">Researcher</div></div></div>
+      <div class="author-card"><div class="author-avatar">AS</div><div><div class="author-name">Ansh Sharma</div><div class="author-role">Researcher</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============== PROBLEM ============== -->
+<div class="page" id="page-problem">
+  <div class="problem-page-wrap">
+    <div class="problem-page-head">
+      <div class="step-num"><em>iv.</em></div>
+      <div>
+        <span class="problem-eyebrow">THE PROBLEM WE SOLVE</span>
+        <h1 class="problem-title">India has 50+ cow breeds.<br>Most farmers can't tell them apart.</h1>
+        <p class="problem-lead" style="color: #86efac;">A trained vet can. But India has too few vets, and they live in cities. Out in the villages — where 70% of India's cattle actually live — nobody knows for sure what breed is in front of them. That ignorance is expensive.</p>
+      </div>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-card reveal delay-1">
+        <div class="problem-num">01</div>
+        <h3 class="problem-card-title">Farmers lose money</h3>
+        <p style="color: #86efac;">A pure Sahiwal cow is worth ₹80,000. A crossbred one is worth ₹30,000. Most farmers can't prove which they own, so they sell at the lower price. They also miss government breed-specific schemes worth thousands of rupees per year.</p>
+      </div>
+      <div class="problem-card reveal delay-2">
+        <div class="problem-num">02</div>
+        <h3 class="problem-card-title">Native breeds are vanishing</h3>
+        <p style="color: #86efac;">Indian breeds are disease-resistant and handle heat well. But they're being replaced by foreign breeds that produce more milk in the short term. Without breed records, the government can't run conservation schemes — and once a breed is gone, it's gone forever.</p>
+      </div>
+      <div class="problem-card reveal delay-3">
+        <div class="problem-num">03</div>
+        <h3 class="problem-card-title">Care goes wrong</h3>
+        <p style="color: #86efac;">Different breeds get different diseases. Sahiwal cattle are prone to mastitis. Gir cattle to tick fever. If the farmer doesn't know the breed, the vet doesn't know what to watch for. Treatment becomes guesswork — and animals suffer.</p>
+      </div>
+    </div>
+
+    <div class="problem-solution reveal">
+      <div class="problem-solution-eyebrow">WHAT PASHUAI DOES</div>
+      <h2 class="problem-solution-title">A photo is all it takes.</h2>
+      <p>Open your phone camera. Take a picture of the cow. Upload it to PashuAI. In two seconds, you get the breed name, where it comes from, common health risks, and care tips. No vet visit. No expert needed. No fees. No internet beyond the upload.</p>
+      <p>We trained PashuAI on 14,200 photos of 8 native Indian breeds. It's right about <strong>85.7%</strong> of the time — the same as a trained vet — and it's available 24 hours a day, in your pocket.</p>
+      <div class="problem-stats">
+        <div class="problem-stat"><span class="problem-stat-num">2 sec</span><span class="problem-stat-lbl">Average response time</span></div>
+        <div class="problem-stat"><span class="problem-stat-num">85.7%</span><span class="problem-stat-lbl">Accuracy on test data</span></div>
+        <div class="problem-stat"><span class="problem-stat-num">8</span><span class="problem-stat-lbl">Indian breeds covered</span></div>
+        <div class="problem-stat"><span class="problem-stat-num">Free</span><span class="problem-stat-lbl">For every farmer, forever</span></div>
+      </div>
+      <div style="margin-top:32px;display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn-primary" onclick="showPage('detect')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          Try it now
+        </button>
+        <button class="btn-secondary" onclick="showPage('breeds')">Browse the breeds</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY MODAL -->
+<div class="modal-overlay" id="whyModalOverlay" onclick="closeWhyModal(event)">
+  <div class="modal-box" id="whyModalBox" style="max-width:700px">
+    <button class="modal-close" onclick="document.getElementById('whyModalOverlay').classList.remove('open')">✕</button>
+    <div style="margin-bottom:24px">
+      <span class="breed-label">Why this exists</span>
+      <div class="modal-breed-name" style="font-size:32px">The <em>problem</em> we're solving.</div>
+      <p style="font-size:13.5px;color:var(--cream-dim);line-height:1.7;margin-top:14px">India is home to over 50 indigenous cattle breeds — yet most go unidentified, misclassified, or ignored. Manual identification requires trained experts who are scarce in rural areas. PashuAI bridges that gap.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="why-row"><div class="why-icon">i.</div><div><div class="why-t">Instant, expert-level identification</div><div class="why-d">Get accurate breed identification in seconds — no vet, no expert, no travel required. Works on any smartphone camera.</div></div></div>
+      <div class="why-row"><div class="why-icon">ii.</div><div><div class="why-t">Proactive disease awareness</div><div class="why-d">Know which diseases to watch for <em>before</em> symptoms appear. Breed-specific disease profiles help farmers act early.</div></div></div>
+      <div class="why-row"><div class="why-icon">iii.</div><div><div class="why-t">Made for rural India</div><div class="why-d">Designed for low-connectivity environments. No signup, no subscription. Just upload a photo and get results.</div></div></div>
+      <div class="why-row"><div class="why-icon">iv.</div><div><div class="why-t">Supports indigenous breed conservation</div><div class="why-d">Accurate breed records help track population trends of endangered indigenous breeds, supporting conservation schemes.</div></div></div>
+      <div class="why-row"><div class="why-icon">v.</div><div><div class="why-t">~85% accuracy with explainable AI</div><div class="why-d">Built on ResNet-50 with Grad-CAM explainability — so you can see exactly which features drove the prediction.</div></div></div>
+      <div class="why-row"><div class="why-icon">vi.</div><div><div class="why-t">Downloadable reports</div><div class="why-d">Save breed identification reports with disease insights — useful for veterinary records and farm management.</div></div></div>
+    </div>
+    <div style="margin-top:28px;display:flex;gap:12px">
+      <button class="btn-primary" onclick="document.getElementById('whyModalOverlay').classList.remove('open');showPage('detect')" style="flex:1;justify-content:center">Try it now</button>
+      <button class="btn-secondary" onclick="document.getElementById('whyModalOverlay').classList.remove('open')" style="flex:1;justify-content:center">Close</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="foot-brand">
+      <div class="brand-mark" style="width:30px;height:30px;border-radius:8px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px">
+          <path d="M8 5.5C7.4 4 6.4 3 5 2.8M16 5.5c.6-1.5 1.6-2.5 3-2.7"/>
+          <path d="M5.5 9C3.5 8.5 2.5 9.5 2.5 10.5s1 1.8 3 1.6"/>
+          <path d="M18.5 9c2-.5 3 .5 3 1.5s-1 1.8-3 1.6"/>
+          <path d="M12 4.5c-3.6 0-5.7 1.8-6.3 4.6-.3 1.4 0 2.8.3 3.9v3c0 1.5 1 2.9 2.8 3.7l1 .4 1 1.4h2.4l1-1.4 1-.4c1.8-.8 2.8-2.2 2.8-3.7v-3c.3-1.1.6-2.5.3-3.9C17.7 6.3 15.6 4.5 12 4.5z"/>
+          <ellipse cx="12" cy="17" rx="2.7" ry="1.7"/>
+        </svg>
+      </div>
+      <span><strong>PashuAI</strong> — cattle intelligence</span>
+    </div>
+    <div class="foot-center">RESNET-50 · 8 BREEDS · 23.5M PARAMS</div>
+    <div class="foot-right">© 2026 · BUILT IN INDIA</div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ════════════════════════════════════════
+   BREED + DISEASE DATA (preserved)
+════════════════════════════════════════ */
+const BREEDS = [
+  {
+    id:'amritmahal', name:'Amritmahal', type:'cow', purpose:'Draught',
+    origin:'Karnataka, India',
+    desc:'One of the finest draught breeds of India, the Amritmahal is known for its exceptional stamina and agility. Historically maintained by the Mysore royal family, these cattle can cover long distances over rough terrain with remarkable endurance.',
+    traits:['Excellent draught','High stamina','Heat-tolerant','Grey/white coat','Erect horns'],
+    diseases:[
+      {name:'Foot-and-Mouth Disease (FMD)',sev:'high',desc:'Highly contagious viral disease causing blisters on mouth and feet. Amritmahal are susceptible due to field exposure.',tags:['Viral','Contagious','Notifiable']},
+      {name:'Hemorrhagic Septicemia',sev:'high',desc:'Bacterial infection (Pasteurella) causing sudden death in draught cattle, especially during monsoon and stress.',tags:['Bacterial','Monsoon risk','Fatal']},
+      {name:'Trypanosomiasis (Surra)',sev:'med',desc:'Blood parasite spread by biting flies, causing weakness, anaemia and weight loss in working cattle.',tags:['Parasitic','Vector-borne']},
+      {name:'Bovine Ephemeral Fever',sev:'low',desc:'Transient viral fever causing temporary lameness and reduced draught performance, usually self-limiting.',tags:['Viral','Seasonal']},
+    ]
+  },
+  {
+    id:'ayrshire', name:'Ayrshire', type:'cow', purpose:'Dairy',
+    origin:'Ayrshire, Scotland (introduced to India)',
+    desc:'Originally from Scotland, Ayrshire cattle have been introduced to India for dairy crossbreeding programs. Known for efficient milk production with good butterfat content and adapt well to diverse climates.',
+    traits:['High milk yield','Good butterfat','Brown-white colour','Docile temperament','Medium build'],
+    diseases:[
+      {name:'Mastitis',sev:'high',desc:'Inflammation of the udder, most common in high-producing dairy breeds. Causes significant milk loss and economic impact.',tags:['Bacterial','Dairy-critical','Common']},
+      {name:'Bovine Leukosis (BLV)',sev:'high',desc:'Viral disease causing tumours in lymphoid tissue. Ayrshire crossbreeds show some susceptibility in tropical conditions.',tags:['Viral','Chronic','Notifiable']},
+      {name:'Milk Fever (Hypocalcaemia)',sev:'med',desc:'Metabolic disorder around calving due to low blood calcium. More common in high milk producers like Ayrshire.',tags:['Metabolic','Post-partum']},
+      {name:'Teat Chap / Teat Canal Infections',sev:'low',desc:'Skin and canal infections of the teat common in dairy breeds; can precede mastitis if untreated.',tags:['Bacterial','Preventable']},
+    ]
+  },
+  {
+    id:'bachaur', name:'Bachaur', type:'cow', purpose:'Draught',
+    origin:'Sitamarhi & Sheohar, Bihar',
+    desc:'A draught breed native to the Bachaur area of Bihar, compact, muscular and well-suited to the agricultural conditions of the Indo-Gangetic plains. Highly valued for field work.',
+    traits:['Strong draught','Compact build','Hardy','Light grey coat','Short horns'],
+    diseases:[
+      {name:'Foot-and-Mouth Disease (FMD)',sev:'high',desc:'Extremely common in Bihar\'s agricultural belt. FMD vaccination is critical for draught breeds in field use.',tags:['Viral','Contagious','Notifiable']},
+      {name:'Hemorrhagic Septicemia',sev:'high',desc:'Frequently fatal in unvaccinated draught cattle, peaking in pre-monsoon conditions of the Gangetic plains.',tags:['Bacterial','Fatal','Seasonal']},
+      {name:'Theileriosis',sev:'med',desc:'Tick-borne protozoan disease causing anaemia and high fever; endemic in Bihar and surrounding states.',tags:['Protozoan','Tick-borne']},
+      {name:'Black Quarter (Blackleg)',sev:'med',desc:'Soil-borne clostridial infection causing sudden lameness and gas gangrene in young cattle.',tags:['Bacterial','Soil-borne','Young cattle']},
+    ]
+  },
+  {
+    id:'badri', name:'Badri', type:'cow', purpose:'Dual-purpose',
+    origin:'Uttarakhand Hill Region',
+    desc:'The Badri is a hill breed native to the Garhwal and Kumaon regions of Uttarakhand. Perfectly adapted to the Himalayan terrain, these small, hardy cattle are invaluable to mountain farming communities.',
+    traits:['Hill-adapted','Cold-tolerant','Small frame','Nutritious milk','Sure-footed'],
+    diseases:[
+      {name:'Contagious Bovine Pleuropneumonia (CBPP)',sev:'high',desc:'Bacterial lung infection that spreads rapidly in confined high-altitude herds where animals shelter together.',tags:['Bacterial','Respiratory','Notifiable']},
+      {name:'Bovine Respiratory Disease (BRD)',sev:'med',desc:'Complex of viral and bacterial respiratory infections worsened by cold Himalayan winters and altitude stress.',tags:['Multi-causal','Seasonal','Cold-weather']},
+      {name:'Liver Fluke (Fasciolosis)',sev:'med',desc:'Parasitic flatworm infestation via marshy pastures in valley areas; causes liver damage and production loss.',tags:['Parasitic','Pasture-borne']},
+      {name:'Frostbite & Hypothermia',sev:'low',desc:'Non-infectious but significant in high-altitude winters; affects extremities and reduces milk output.',tags:['Environmental','Seasonal']},
+    ]
+  },
+  {
+    id:'lakhimi', name:'Lakhimi', type:'cow', purpose:'Dairy + Draught',
+    origin:'Assam, Northeast India',
+    desc:'The Lakhimi (also Lakhimpur) is a dual-purpose breed from Assam, adapted to the hot and humid climate of Northeast India. It plays a vital role in the agricultural economy of Assam.',
+    traits:['Dual-purpose','Humid climate adapted','Medium size','Light coat','Docile'],
+    diseases:[
+      {name:'Foot-and-Mouth Disease (FMD)',sev:'high',desc:'Assam\'s high humidity and shared grazing land make FMD outbreaks frequent. Annual vaccination is essential.',tags:['Viral','Contagious','Notifiable']},
+      {name:'Babesiosis (Tick Fever)',sev:'high',desc:'Blood parasite transmitted by ticks prevalent in humid Assamese forests and pastures; causes severe anaemia.',tags:['Protozoan','Tick-borne','Endemic']},
+      {name:'Bovine Tropical Theileriosis',sev:'med',desc:'Common in humid tropical regions; causes lymph node enlargement, high fever and nasal discharge.',tags:['Protozoan','Tick-borne','Tropical']},
+      {name:'Bovine Diarrhoea (BVD)',sev:'low',desc:'Viral enteric and respiratory disease; Lakhimi calves are susceptible particularly during wet monsoon months.',tags:['Viral','Calves','Seasonal']},
+    ]
+  },
+  {
+    id:'sahiwal', name:'Sahiwal', type:'cow', purpose:'Dairy',
+    origin:'Punjab (India & Pakistan)',
+    desc:'One of the best dairy breeds of the Indian subcontinent, the Sahiwal is renowned for high milk production, heat tolerance, and resistance to tick-borne diseases. Widely used in crossbreeding programmes worldwide.',
+    traits:['Top milk producer','Heat-resistant','Tick-tolerant','Reddish-brown','Loose skin'],
+    diseases:[
+      {name:'Mastitis',sev:'high',desc:'Despite tick resistance, Sahiwal\'s high milk output makes them prone to udder infections, especially subclinical mastitis.',tags:['Bacterial','Dairy-critical','Subclinical']},
+      {name:'Bovine Tuberculosis',sev:'high',desc:'Chronic bacterial disease; Sahiwal in cross-breeding programmes may be exposed at livestock markets and farms.',tags:['Bacterial','Zoonotic','Notifiable']},
+      {name:'Leptospirosis',sev:'med',desc:'Waterborne bacterial infection common in Punjab\'s irrigated farmland; can cause abortion and jaundice.',tags:['Bacterial','Zoonotic','Waterborne']},
+      {name:'Brucellosis',sev:'med',desc:'Reproductive disease causing abortions in Sahiwal cows; zoonotic risk to farmers. Vaccination programs exist.',tags:['Bacterial','Reproductive','Zoonotic']},
+    ]
+  },
+  {
+    id:'siri', name:'Siri', type:'cow', purpose:'Dual-purpose',
+    origin:'Sikkim & Darjeeling Hills',
+    desc:'The Siri is a hill breed from Sikkim and the Darjeeling hills, a natural cross of local cattle with Yak or Mithun in some lineages. Well-adapted to steep terrain and cold temperatures, a pillar of hill community farming.',
+    traits:['Mountain-adapted','Yak-influenced','Cold tolerant','Black & white','Dual purpose'],
+    diseases:[
+      {name:'Bovine Respiratory Disease (BRD)',sev:'high',desc:'Siri cattle in high-altitude cold-wet conditions are highly prone to pneumonia and respiratory complexes.',tags:['Multi-causal','Respiratory','Altitude']},
+      {name:'Internal Parasitism (Helminths)',sev:'med',desc:'Gastrointestinal worm burdens are high on Sikkimese pastures; seasonal deworming is critical.',tags:['Parasitic','Pasture-borne','Chronic']},
+      {name:'Johne\'s Disease (Paratuberculosis)',sev:'med',desc:'Chronic bacterial infection causing progressive weight loss and diarrhoea; prevalent in hill breed cattle.',tags:['Bacterial','Chronic','Hill breeds']},
+      {name:'Contagious Ecthyma (Orf)',sev:'low',desc:'Viral skin disease causing lesions around the mouth; often introduced via contact with sheep on shared hill pastures.',tags:['Viral','Skin','Zoonotic']},
+    ]
+  },
+  {
+    id:'umblachery', name:'Umblachery', type:'cow', purpose:'Draught',
+    origin:'Thanjavur & Nagapattinam, Tamil Nadu',
+    desc:'A purebred draught cattle from the coastal districts of Tamil Nadu, superbly adapted to wet rice cultivation and paddy field work. Its hooves are uniquely suited to working in waterlogged soils.',
+    traits:['Paddy field specialist','Waterlogged terrain','Grey coat','Compact','High endurance'],
+    diseases:[
+      {name:'Foot Rot (Foul of the Foot)',sev:'high',desc:'Bacterial infection of the hoof extremely common in Umblachery due to prolonged exposure to waterlogged paddy fields.',tags:['Bacterial','Hoof','Paddy-exposure']},
+      {name:'Hemorrhagic Septicemia',sev:'high',desc:'Draught cattle in Tamil Nadu\'s coastal delta regions face high HS risk during pre-monsoon. Vaccination is essential.',tags:['Bacterial','Fatal','Seasonal']},
+      {name:'Tropical Skin Diseases (Dermatophilosis)',sev:'med',desc:'Fungal/bacterial skin crusting worsened by wet field conditions and humidity in coastal Tamil Nadu.',tags:['Bacterial','Skin','Humidity']},
+      {name:'Anaplasmosis',sev:'med',desc:'Tick-borne rickettsial disease causing anaemia; common in deltaic wetland environments with high tick pressure.',tags:['Rickettsial','Tick-borne','Anaemia']},
+    ]
+  }
+];
+
+/* SVG illustrations — Indian cattle profile with characteristic hump */
+const cattleSVG = `<svg viewBox="0 0 100 60" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M14 36 Q14 28 22 26 Q26 16 34 14 Q42 14 44 22 L48 26 L52 22 Q60 12 68 22 L72 26 L88 26 Q94 26 96 32 Q96 40 88 40 L26 40 Q18 40 16 36 Z"/>
+  <path d="M30 40 L30 54 M40 40 L40 54 M76 40 L76 54 M86 40 L86 54"/>
+  <path d="M96 32 Q100 34 99 42"/>
+  <path d="M30 14 L28 8"/>
+  <path d="M38 16 Q42 14 44 16"/>
+  <circle cx="32" cy="22" r="0.8" fill="currentColor" stroke="none"/>
+  <path d="M22 36 Q23 40 24 40" opacity="0.6"/>
+</svg>`;
+
+/* === Build dropdown === */
+const dp = document.getElementById('dropdownPanel');
+BREEDS.forEach((b,i)=>{
+  const btn=document.createElement('button');
+  btn.className='drop-btn';
+  btn.innerHTML=`<span class="num">${String(i+1).padStart(2,'0')}</span>${b.name}`;
+  btn.onclick=(e)=>{e.stopPropagation();showPage('breeds');setTimeout(()=>openModal(b.id),200)};
+  dp.appendChild(btn);
+});
+
+/* === Build breeds grid === */
+function buildGrid(filter='all'){
+  const grid=document.getElementById('breedsGrid');
+  grid.innerHTML='';
+  BREEDS.filter(b=>{
+    if(filter==='all') return true;
+    if(filter==='cow') return b.type==='cow';
+    if(filter==='dairy') return b.purpose.toLowerCase().includes('dairy');
+    if(filter==='draught') return b.purpose.toLowerCase().includes('draught');
+    return true;
+  }).forEach((b,i)=>{
+    const card=document.createElement('div');
+    card.className='breed-card reveal delay-'+Math.min(i%4+1,4);
+    card.innerHTML=`
+      <div class="breed-card-illus">
+        <span class="breed-card-num">№ ${String(BREEDS.indexOf(b)+1).padStart(2,'0')}</span>
+        ${cattleSVG}
+      </div>
+      <div class="breed-card-body">
+        <div class="breed-card-name"><em>${b.name.charAt(0)}</em>${b.name.slice(1)}</div>
+        <div class="breed-card-meta">
+          <span class="breed-tag cow">Bos indicus</span>
+          <span class="breed-tag purpose">${b.purpose}</span>
+        </div>
+        <div class="breed-card-origin">— ${b.origin}</div>
+        <div class="breed-card-desc">${b.desc.substring(0,95)}…</div>
+        <div class="breed-card-trait">${b.traits.slice(0,3).map(t=>`<span class="trait-tag">${t}</span>`).join('')}</div>
+      </div>
+    `;
+    card.onclick=()=>openModal(b.id);
+    grid.appendChild(card);
+  });
+}
+buildGrid();
+
+function filterBreeds(type,el){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  buildGrid(type);
+}
+
+/* === Modal === */
+function openModal(id){
+  const b=BREEDS.find(x=>x.id===id);if(!b)return;
+  document.getElementById('mIllus').innerHTML=cattleSVG;
+  document.getElementById('mName').innerHTML=`<em>${b.name.charAt(0)}</em>${b.name.slice(1)}`;
+  document.getElementById('mType').innerHTML=`<div style="display:flex;gap:6px;margin-top:6px"><span class="breed-tag cow">Bos indicus</span><span class="breed-tag purpose">${b.purpose}</span></div>`;
+  document.getElementById('mOrigin').textContent=b.origin;
+  document.getElementById('mPurpose').textContent=b.purpose;
+  document.getElementById('mDesc').textContent=b.desc;
+  document.getElementById('mTraits').innerHTML=b.traits.map(t=>`<span class="trait-tag">${t}</span>`).join('');
+  const dl=document.getElementById('mDiseases');
+  dl.innerHTML=b.diseases.map(d=>{
+    const col=d.sev==='high'?'var(--bad)':d.sev==='med'?'var(--warn)':'var(--ok)';
+    const bg=d.sev==='high'?'rgba(201,73,44,.12)':d.sev==='med'?'rgba(217,124,43,.12)':'rgba(138,168,64,.1)';
+    const label=d.sev==='high'?'High':d.sev==='med'?'Mod':'Low';
+    return `<div class="mdl-disease">
+      <div class="mdl-disease-dot" style="background:${col}"></div>
+      <div class="mdl-disease-name">${d.name}</div>
+      <div class="mdl-disease-sev" style="background:${bg};color:${col};border:1px solid ${col}55">${label}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(e){if(e.target===document.getElementById('modalOverlay'))closeModalDirect()}
+function closeModalDirect(){document.getElementById('modalOverlay').classList.remove('open')}
+function closeWhyModal(e){if(e.target===document.getElementById('whyModalOverlay'))document.getElementById('whyModalOverlay').classList.remove('open')}
+
+/* === Navigation === */
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nlink').forEach(b=>b.classList.remove('active'));
+  const page=document.getElementById('page-'+name);
+  if(page)page.classList.add('active');
+  const btn=document.getElementById('nav-'+name);
+  if(btn)btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  /* Re-scan reveals after page switch (slight delay so layout settles) */
+  setTimeout(()=>{if(window.__rescanReveals)window.__rescanReveals()},120);
+}
+
+/* === Detect logic === */
+function handleFile(input){
+  const file=input.files[0];if(!file)return;
+  const url=URL.createObjectURL(file);
+  document.getElementById('previewThumb').src=url;
+  document.getElementById('previewImage').src=url;
+  document.getElementById('previewName').textContent=file.name;
+  document.getElementById('dropIdle').style.display='none';
+  document.getElementById('dropReady').style.display='flex';
+  document.getElementById('detectBtn').disabled=false;
+  document.getElementById('resultWrap').style.display='none';
+}
+
+const dz=document.getElementById('dropZone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragging')});
+dz.addEventListener('dragleave',()=>dz.classList.remove('dragging'));
+dz.addEventListener('drop',e=>{
+  e.preventDefault();dz.classList.remove('dragging');
+  const file=e.dataTransfer.files[0];
+  if(file&&file.type.startsWith('image/')){
+    const dt=new DataTransfer();dt.items.add(file);
+    document.getElementById('fileInput').files=dt.files;
+    handleFile(document.getElementById('fileInput'));
+  }
+});
+
+const LOAD_MSGS=['Waking the network…','Looking at the animal…','Tracing the hump curvature…','Measuring dewlap and horn arc…','Reading coat texture and colour…','Comparing against eight learned breeds…','Computing softmax probabilities…','Cross-referencing disease registry…','Drafting the verdict…'];
+let msgTimer;
+
+function renderDiseases(breedName){
+  const lower=breedName.toLowerCase();
+  const match=BREEDS.find(b=>lower.includes(b.id)||b.name.toLowerCase().split(' ').some(w=>lower.includes(w)));
+  const diseases=match?match.diseases:[];
+  const grid=document.getElementById('diseaseGrid');
+  if(!diseases.length){
+    grid.innerHTML=`<div style="grid-column:1/-1;padding:18px;text-align:center;color:var(--cream-dim);font-size:13px;font-family:'Geist',sans-serif;font-style:italic">No specific disease data available for this breed.</div>`;
+    return;
+  }
+  grid.innerHTML=diseases.map(d=>`
+    <div class="disease-card sev-${d.sev}">
+      <div class="disease-top">
+        <div class="disease-name">${d.name}</div>
+        <div class="disease-sev">${d.sev==='high'?'High':d.sev==='med'?'Moderate':'Low'}</div>
+      </div>
+      <div class="disease-desc">${d.desc}</div>
+      <div class="disease-tags">${d.tags.map(t=>`<span class="disease-tag">${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+function uploadImage(){
+  const file=document.getElementById('fileInput').files[0];
+  if(!file){showToast('Please upload an image first');return;}
+  document.getElementById('loadingWrap').style.display='flex';
+  document.getElementById('resultWrap').style.display='none';
+  document.getElementById('loadingWrap').scrollIntoView({behavior:'smooth',block:'center'});
+  let mi=0;
+  const lm=document.getElementById('loadingMsg');
+  lm.textContent=LOAD_MSGS[0];
+  msgTimer=setInterval(()=>{mi=(mi+1)%LOAD_MSGS.length;lm.textContent=LOAD_MSGS[mi]},1700);
+  const fd=new FormData();fd.append('file',file);
+  fetch('/predict',{method:'POST',body:fd})
+    .then(r=>r.json())
+    .then(data=>{
+      clearInterval(msgTimer);
+      document.getElementById('loadingWrap').style.display='none';
+      document.getElementById('breed').textContent=data.breed;
+      document.getElementById('confidence').textContent=data.confidence+'%';
+      setTimeout(()=>{document.getElementById('confFill').style.width=Math.min(data.confidence,100)+'%'},120);
+      document.getElementById('origin').textContent=data.origin;
+      document.getElementById('description').textContent=data.description;
+      document.getElementById('others').innerHTML=(data.others||[]).map(o=>`
+        <div class="other-row">
+          <span class="other-name">${o.breed}</span>
+          <span class="other-bar-track"><span class="other-bar-fill" style="width:${Math.min(o.conf,100)}%"></span></span>
+          <span class="other-pct">${o.conf}%</span>
+        </div>`).join('');
+      renderDiseases(data.breed);
+      document.getElementById('resultWrap').style.display='block';
+      document.getElementById('resultWrap').scrollIntoView({behavior:'smooth',block:'start'});
+    })
+    .catch(()=>{
+      clearInterval(msgTimer);
+      document.getElementById('loadingWrap').style.display='none';
+      showToast('Server error — is Flask running?');
+    });
+}
+
+function resetDetect(){
+  document.getElementById('fileInput').value='';
+  document.getElementById('dropIdle').style.display='flex';
+  document.getElementById('dropReady').style.display='none';
+  document.getElementById('detectBtn').disabled=true;
+  document.getElementById('resultWrap').style.display='none';
+  document.getElementById('confFill').style.width='0%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function downloadReport(){
+  const breed=document.getElementById('breed').textContent;
+  if(!breed){showToast('No result to download yet');return;}
+  const conf=document.getElementById('confidence').textContent;
+  const origin=document.getElementById('origin').textContent;
+  const desc=document.getElementById('description').textContent;
+  const now=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  const match=BREEDS.find(b=>breed.toLowerCase().includes(b.id)||b.name.toLowerCase().split(' ').some(w=>breed.toLowerCase().includes(w)));
+  let diseaseSection='';
+  if(match){
+    diseaseSection=`\nCOMMON DISEASES TO MONITOR:\n${'─'.repeat(48)}\n`+
+    match.diseases.map(d=>`  [${(d.sev==='high'?'HIGH RISK':d.sev==='med'?'MODERATE':'LOW RISK').padEnd(10)}] ${d.name}\n               ${d.desc}`).join('\n\n');
+  }
+  const txt=`GOVANSH — BREED IDENTIFICATION REPORT
+Generated: ${now}
+${'─'.repeat(48)}
+
+BREED IDENTIFIED : ${breed}
+CONFIDENCE       : ${conf}
+ORIGIN           : ${origin}
+
+DESCRIPTION:
+${desc}
+${diseaseSection}
+
+${'─'.repeat(48)}
+DISCLAIMER: Disease information is educational, not diagnostic.
+Always consult a licensed veterinarian.
+${'─'.repeat(48)}
+PashuAI · CowBreed AI · ResNet-50 · 8 Indian Breeds
+`;
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain'}));
+  a.download=`PashuAI_${breed.replace(/\s+/g,'_')}_Report.txt`;
+  a.click();
+  showToast('Report downloaded.');
+}
+
+/* === Reveal-on-scroll + Counter animation (modern SaaS UX) === */
+(function(){
+  /* easeOutCubic */
+  const ease = t => 1 - Math.pow(1 - t, 3);
+
+  function animateCounter(el){
+    if(el.dataset.done==='1') return;
+    el.dataset.done='1';
+    const target=parseFloat(el.dataset.target);
+    const decimals=parseInt(el.dataset.decimals||'0',10);
+    const suffix=el.dataset.suffix||'';
+    const useComma=el.dataset.comma==='1';
+    const dur=1400+Math.random()*400;
+    const start=performance.now();
+    function tick(now){
+      const t=Math.min((now-start)/dur,1);
+      const v=target*ease(t);
+      let s=v.toFixed(decimals);
+      if(useComma){
+        const parts=s.split('.');
+        parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,',');
+        s=parts.join('.');
+      }
+      el.textContent=s+suffix;
+      if(t<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function setupObserver(){
+    if(!('IntersectionObserver' in window)){
+      /* Fallback: just reveal everything */
+      document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+      document.querySelectorAll('.counter').forEach(animateCounter);
+      return;
+    }
+    const io=new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          /* Trigger any counters inside */
+          entry.target.querySelectorAll('.counter').forEach(animateCounter);
+          io.unobserve(entry.target);
+        }
+      });
+    },{threshold:.15,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+    /* Also observe counters that are not inside .reveal */
+    const cio=new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          animateCounter(entry.target);
+          cio.unobserve(entry.target);
+        }
+      });
+    },{threshold:.4});
+    document.querySelectorAll('.counter').forEach(c=>{
+      if(!c.closest('.reveal')) cio.observe(c);
+    });
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',setupObserver);
+  } else {
+    setupObserver();
+  }
+
+  /* Re-scan when navigating between pages — observed elements that get re-shown should re-trigger */
+  window.__rescanReveals=function(){
+    document.querySelectorAll('.reveal:not(.in)').forEach(el=>{
+      const r=el.getBoundingClientRect();
+      if(r.top<window.innerHeight*.95 && r.bottom>0){
+        el.classList.add('in');
+        el.querySelectorAll('.counter').forEach(animateCounter);
+      }
+    });
+  };
+})();
+
+/* === Custom cursor === */
+const cur=document.getElementById('cur');
+const ring=document.getElementById('cur-r');
+let rx=0,ry=0,cx=0,cy=0;
+document.addEventListener('mousemove',e=>{
+  cx=e.clientX;cy=e.clientY;
+  cur.style.left=cx+'px';cur.style.top=cy+'px';
+});
+(function animRing(){rx+=(cx-rx)*.14;ry+=(cy-ry)*.14;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing)})();
+function bindCursor(){
+  document.querySelectorAll('button,[onclick],a,.breed-card,.tech-card,.uc-card,.author-card,.disease-card,.fig-row,.tip,.modal-field,.mdl-disease,.drop-btn,.filter-btn').forEach(el=>{
+    if(el.dataset.cursor) return;
+    el.dataset.cursor='1';
+    el.addEventListener('mouseenter',()=>{cur.style.width='14px';cur.style.height='14px';cur.style.background='var(--saffron-soft)';ring.style.width='44px';ring.style.height='44px';ring.style.borderColor='var(--saffron)'});
+    el.addEventListener('mouseleave',()=>{cur.style.width='6px';cur.style.height='6px';cur.style.background='var(--saffron)';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(232,152,41,.35)'});
+  });
+}
+bindCursor();
+const obsOpts={childList:true,subtree:true};
+new MutationObserver(bindCursor).observe(document.body,obsOpts);
+
+/* === Toast === */
+function showToast(msg){
+  const old=document.querySelector('.toast');if(old)old.remove();
+  const el=document.createElement('div');
+  el.className='toast';el.textContent=msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),3200);
+}
+
+/* Ambient background scene removed for readability — page bg stays clean */
+
+
+/* === HERO 3D COW SCENE — Three.js procedural Bos indicus === */
+(function(){
+  const canvas=document.getElementById('hero3d-canvas');
+  if(!canvas||!window.THREE)return;
+
+  function init(){
+    const wrap=canvas.parentElement;
+    const w=wrap.clientWidth,h=wrap.clientHeight;
+    const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    renderer.setSize(w,h);
+    renderer.setClearColor(0x000000,0);
+    renderer.outputEncoding=THREE.sRGBEncoding;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure=1.05;
+
+    const scene=new THREE.Scene();
+    scene.fog=new THREE.Fog(0x0e1110,8,22);
+    const camera=new THREE.PerspectiveCamera(38,w/h,0.1,100);
+    camera.position.set(.5,1.4,9.5);
+    camera.lookAt(0,-.2,0);
+
+    /* Lights — soft 3-point studio */
+    scene.add(new THREE.AmbientLight(0xb8c4d0,.45));
+    const key=new THREE.DirectionalLight(0xfff5e8,1.6);key.position.set(5,7,4);scene.add(key);
+    const fill=new THREE.DirectionalLight(0x8aa8c0,.5);fill.position.set(-4,2,3);scene.add(fill);
+    const rim=new THREE.DirectionalLight(0xc0d0e0,.85);rim.position.set(-3,5,-4);scene.add(rim);
+    scene.add(new THREE.HemisphereLight(0xa8b8c8,0x202428,.35));
+
+    /* Holographic grid floor */
+    const grid=new THREE.GridHelper(14,28,0x60a5fa,0x2d3748);
+    grid.material.transparent=true;grid.material.opacity=.18;grid.position.y=-1.65;
+    scene.add(grid);
+
+    /* Reflective floor */
+    const floor=new THREE.Mesh(
+      new THREE.CircleGeometry(7,48),
+      new THREE.MeshStandardMaterial({color:0x12161a,metalness:.7,roughness:.45,transparent:true,opacity:.92})
+    );
+    floor.rotation.x=-Math.PI/2;floor.position.y=-1.66;scene.add(floor);
+
+    /* Soft AO shadow */
+    const shadow=new THREE.Mesh(
+      new THREE.CircleGeometry(2.2,32),
+      new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.45})
+    );
+    shadow.rotation.x=-Math.PI/2;shadow.position.set(.6,-1.64,0);shadow.scale.set(1.4,.7,1);scene.add(shadow);
+
+    /* === COW (Bos indicus / Indian zebu) === */
+    const cowGroup=new THREE.Group();
+    const cowMat=new THREE.MeshStandardMaterial({color:0xc8ccd2,metalness:.18,roughness:.55});
+    const cowMatLight=new THREE.MeshStandardMaterial({color:0xe2e6ea,metalness:.15,roughness:.5});
+    const hornMat=new THREE.MeshStandardMaterial({color:0x7a7d82,metalness:.4,roughness:.35});
+    const darkMat=new THREE.MeshStandardMaterial({color:0x14171a,metalness:.3,roughness:.5});
+    const hoofMat=new THREE.MeshStandardMaterial({color:0x2a2d30,metalness:.4,roughness:.55});
+
+    /* Body */
+    const body=new THREE.Mesh(new THREE.SphereGeometry(.72,40,28),cowMat);
+    body.scale.set(2.0,.95,1.05);cowGroup.add(body);
+    /* Belly highlight */
+    const belly=new THREE.Mesh(new THREE.SphereGeometry(.55,32,20),cowMatLight);
+    belly.position.set(0,-.45,0);belly.scale.set(2.4,.45,.9);cowGroup.add(belly);
+    /* Shoulder + hindquarters */
+    const shoulder=new THREE.Mesh(new THREE.SphereGeometry(.5,24,18),cowMat);
+    shoulder.position.set(-.85,.3,0);shoulder.scale.set(.85,.85,1.05);cowGroup.add(shoulder);
+    const hindq=new THREE.Mesh(new THREE.SphereGeometry(.55,24,18),cowMat);
+    hindq.position.set(.95,.2,0);hindq.scale.set(.85,.95,1.0);cowGroup.add(hindq);
+    /* Hump (zebu signature) */
+    const hump=new THREE.Mesh(new THREE.SphereGeometry(.55,32,20,0,Math.PI*2,0,Math.PI*.55),cowMat);
+    hump.position.set(-.45,.55,0);hump.scale.set(1.05,1.25,1.2);cowGroup.add(hump);
+    /* Neck */
+    const neck=new THREE.Mesh(new THREE.CylinderGeometry(.34,.5,1.0,20),cowMat);
+    neck.position.set(-1.55,.2,0);neck.rotation.z=Math.PI/3.0;cowGroup.add(neck);
+    /* Brisket */
+    const brisket=new THREE.Mesh(new THREE.SphereGeometry(.32,18,14),cowMat);
+    brisket.position.set(-1.4,-.2,0);brisket.scale.set(1.2,.85,.9);cowGroup.add(brisket);
+    /* Dewlap */
+    const dewlap=new THREE.Mesh(new THREE.SphereGeometry(.3,20,16),cowMat);
+    dewlap.position.set(-1.7,-.35,0);dewlap.scale.set(1.5,.8,.85);cowGroup.add(dewlap);
+    const dewlap2=new THREE.Mesh(new THREE.SphereGeometry(.2,16,12),cowMat);
+    dewlap2.position.set(-1.95,-.5,0);dewlap2.scale.set(1.3,.6,.85);cowGroup.add(dewlap2);
+    /* Head */
+    const head=new THREE.Mesh(new THREE.SphereGeometry(.4,28,22),cowMat);
+    head.position.set(-2.2,.55,0);head.scale.set(1.2,.95,.95);cowGroup.add(head);
+    const forehead=new THREE.Mesh(new THREE.SphereGeometry(.3,18,14),cowMat);
+    forehead.position.set(-2.1,.85,0);forehead.scale.set(.8,.55,.9);cowGroup.add(forehead);
+    /* Muzzle */
+    const muzzle=new THREE.Mesh(new THREE.SphereGeometry(.32,24,18),cowMatLight);
+    muzzle.position.set(-2.7,.32,0);muzzle.scale.set(1.1,.85,.9);cowGroup.add(muzzle);
+    /* Mouth */
+    const mouth=new THREE.Mesh(new THREE.BoxGeometry(.1,.025,.2),darkMat);
+    mouth.position.set(-3.0,.25,0);cowGroup.add(mouth);
+    /* Nostrils */
+    [[-2.95,.42,.12],[-2.95,.42,-.12]].forEach(p=>{
+      const n=new THREE.Mesh(new THREE.SphereGeometry(.05,12,10),darkMat);
+      n.position.set(p[0],p[1],p[2]);cowGroup.add(n);
+    });
+    /* Eyes with highlights */
+    const eyeMat=new THREE.MeshStandardMaterial({color:0x0a0c0e,metalness:.9,roughness:.15});
+    [[-2.1,.78,.34],[-2.1,.78,-.34]].forEach(p=>{
+      const eye=new THREE.Mesh(new THREE.SphereGeometry(.075,16,12),eyeMat);
+      eye.position.set(p[0],p[1],p[2]);cowGroup.add(eye);
+      const hl=new THREE.Mesh(new THREE.SphereGeometry(.022,10,8),new THREE.MeshBasicMaterial({color:0xffffff}));
+      hl.position.set(p[0]-.04,p[1]+.02,p[2]+.05);cowGroup.add(hl);
+      const lid=new THREE.Mesh(new THREE.TorusGeometry(.075,.012,8,16,Math.PI),darkMat);
+      lid.position.set(p[0],p[1]+.05,p[2]);lid.rotation.set(Math.PI/2,0,0);cowGroup.add(lid);
+    });
+    /* Curved horns (TubeGeometry on bezier) */
+    [[1,.28],[-1,-.28]].forEach(([s,z])=>{
+      const curve=new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-1.95,1.0,z),
+        new THREE.Vector3(-1.92,1.15,z*1.4),
+        new THREE.Vector3(-1.85,1.4,z*1.6),
+        new THREE.Vector3(-1.78,1.65,z*1.5),
+        new THREE.Vector3(-1.72,1.85,z*1.3),
+      ]);
+      const horn=new THREE.Mesh(new THREE.TubeGeometry(curve,20,.08,12,false),hornMat);
+      cowGroup.add(horn);
+      const hornTip=new THREE.Mesh(new THREE.SphereGeometry(.05,12,8),new THREE.MeshStandardMaterial({color:0x4a4d50,metalness:.5,roughness:.3}));
+      hornTip.position.set(-1.72,1.85,z*1.3);cowGroup.add(hornTip);
+      const hornBase=new THREE.Mesh(new THREE.TorusGeometry(.1,.025,8,16),hornMat);
+      hornBase.position.set(-1.95,1.0,z);hornBase.rotation.x=Math.PI/2;cowGroup.add(hornBase);
+    });
+    /* Ears (drooping zebu) */
+    [[1,.5],[-1,-.5]].forEach(([s,z])=>{
+      const ear=new THREE.Mesh(new THREE.SphereGeometry(.2,18,14,0,Math.PI*2,0,Math.PI/2),cowMat);
+      ear.position.set(-1.85,.65,z);ear.scale.set(.5,.95,1.4);ear.rotation.set(0,s*.35,s*-.6);
+      cowGroup.add(ear);
+      const innerEar=new THREE.Mesh(new THREE.SphereGeometry(.16,16,12,0,Math.PI*2,0,Math.PI/2),new THREE.MeshStandardMaterial({color:0x9a9da2,roughness:.6}));
+      innerEar.position.set(-1.83,.66,z*1.05);innerEar.scale.set(.35,.85,1.25);innerEar.rotation.set(0,s*.35,s*-.6);
+      cowGroup.add(innerEar);
+    });
+    /* Legs with knee joints + cloven hooves */
+    [[-.95,.42,.05],[-.95,-.42,.05],[.95,.42,-.05],[.95,-.42,-.05]].forEach(p=>{
+      const upper=new THREE.Mesh(new THREE.CylinderGeometry(.13,.11,.55,14),cowMat);
+      upper.position.set(p[0],-.6,p[1]);upper.rotation.x=p[2]*.5;cowGroup.add(upper);
+      const knee=new THREE.Mesh(new THREE.SphereGeometry(.12,14,10),cowMat);
+      knee.position.set(p[0],-.85,p[1]+p[2]);cowGroup.add(knee);
+      const lower=new THREE.Mesh(new THREE.CylinderGeometry(.10,.085,.5,14),cowMat);
+      lower.position.set(p[0],-1.15,p[1]+p[2]*1.4);cowGroup.add(lower);
+      const hoof=new THREE.Mesh(new THREE.SphereGeometry(.13,14,10,0,Math.PI*2,0,Math.PI/2),hoofMat);
+      hoof.position.set(p[0],-1.42,p[1]+p[2]*1.4);hoof.rotation.x=Math.PI;hoof.scale.set(1.05,.5,1.3);
+      cowGroup.add(hoof);
+      const split=new THREE.Mesh(new THREE.BoxGeometry(.04,.05,.18),new THREE.MeshBasicMaterial({color:0x05060a}));
+      split.position.set(p[0],-1.4,p[1]+p[2]*1.4);cowGroup.add(split);
+    });
+    /* Curved tail */
+    const tailCurve=new THREE.CatmullRomCurve3([
+      new THREE.Vector3(1.4,.05,0),
+      new THREE.Vector3(1.6,-.1,0),
+      new THREE.Vector3(1.85,-.35,.05),
+      new THREE.Vector3(2.0,-.6,.02),
+    ]);
+    cowGroup.add(new THREE.Mesh(new THREE.TubeGeometry(tailCurve,18,.045,10,false),cowMat));
+    /* Tail tuft */
+    [[2.05,-.65,0],[2.02,-.7,.06],[2.02,-.7,-.06],[2.08,-.6,.05],[2.08,-.62,-.05],[2.05,-.75,0],[2.0,-.68,0]].forEach(p=>{
+      const t=new THREE.Mesh(new THREE.SphereGeometry(.075,10,8),hoofMat);
+      t.position.set(p[0],p[1],p[2]);cowGroup.add(t);
+    });
+
+    cowGroup.position.set(.6,-.35,0);
+    cowGroup.scale.setScalar(.85);
+    scene.add(cowGroup);
+
+    /* Floating particles */
+    const PCount=50;
+    const pPos=new Float32Array(PCount*3);
+    const pVel=[];
+    for(let i=0;i<PCount;i++){
+      pPos[i*3]=(Math.random()-.5)*7;
+      pPos[i*3+1]=Math.random()*4-1.6;
+      pPos[i*3+2]=(Math.random()-.5)*4;
+      pVel.push(.2+Math.random()*.3);
+    }
+    const pGeom=new THREE.BufferGeometry();
+    pGeom.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+    scene.add(new THREE.Points(pGeom,new THREE.PointsMaterial({
+      color:0xc0d0e0,size:.045,transparent:true,opacity:.55,
+      blending:THREE.AdditiveBlending,depthWrite:false
+    })));
+
+    /* Mouse parallax */
+    let mx=0,my=0,tx=0,ty=0;
+    wrap.addEventListener('mousemove',e=>{
+      const r=wrap.getBoundingClientRect();
+      mx=((e.clientX-r.left)/r.width-.5)*2;
+      my=((e.clientY-r.top)/r.height-.5)*2;
+    });
+    wrap.addEventListener('mouseleave',()=>{mx=0;my=0});
+
+    function resize(){
+      const w=wrap.clientWidth,h=wrap.clientHeight;
+      renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize',resize);
+
+    const clock=new THREE.Clock();
+    function animate(){
+      requestAnimationFrame(animate);
+      const t=clock.getElapsedTime();
+      tx+=(mx-tx)*.05;ty+=(my-ty)*.05;
+      cowGroup.rotation.y=t*.18+tx*.3;
+      cowGroup.rotation.x=Math.sin(t*.4)*.025-ty*.1;
+      cowGroup.position.y=-.35+Math.sin(t*.7)*.025;
+      const arr=pGeom.attributes.position.array;
+      for(let i=0;i<PCount;i++){
+        arr[i*3+1]+=pVel[i]*.004;
+        if(arr[i*3+1]>2.5){arr[i*3+1]=-1.6;arr[i*3]=(Math.random()-.5)*7;arr[i*3+2]=(Math.random()-.5)*4}
+      }
+      pGeom.attributes.position.needsUpdate=true;
+      camera.position.z=9.5+Math.sin(t*.25)*.25;
+      camera.position.y=1.4+Math.cos(t*.2)*.08;
+      camera.lookAt(.4,-.2,0);
+      grid.material.opacity=.14+Math.sin(t*.6)*.04;
+      renderer.render(scene,camera);
+    }
+    animate();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+
+/* === Mockup status text cycle: SCANNING → EXTRACTING → IDENTIFIED === */
+(function(){
+  const el=document.getElementById('mockup-status');
+  if(!el)return;
+  const states=[
+    {text:'SCANNING IMAGE',color:'#60a5fa'},
+    {text:'EXTRACTING FEATURES',color:'#fbbf24'},
+    {text:'BREED IDENTIFIED',color:'#22c55e'},
+  ];
+  let i=0;
+  el.style.color=states[0].color;
+  const cycle=setInterval(()=>{
+    i++;
+    if(i>=states.length){clearInterval(cycle);return}
+    el.textContent=states[i].text;
+    el.style.color=states[i].color;
+  },1300);
+})();
+
+</script>
+</body>
+</html>
